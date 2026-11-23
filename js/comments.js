@@ -9,7 +9,6 @@
   const COLLECTION = 'comentarios';
   const EDIT_WINDOW_MS = 15 * 60 * 1000;
   const MAX_COMMENTS = 100;
-  const MAX_NAME = 80;
   const DELETE_CONFIRM_MS = 4000;
   const REFRESH_MS = 30000;
   const DEFAULT_SCORE = 8;
@@ -218,7 +217,9 @@
       await collection.doc(state.editingId).update({ ...content, editado: FieldValue.serverTimestamp() });
       return;
     }
-    const nombre = (state.user.displayName || t('c.anonymous')).trim().slice(0, MAX_NAME);
+    // Se guarda el nombre exacto de la cuenta: las reglas de Firestore lo comparan con el de Google.
+    // Si la cuenta no tiene nombre se guarda vacío y al mostrarlo sale "Usuario de Google".
+    const nombre = state.user.displayName || '';
     await collection.add({ uid: state.user.uid, nombre, ...content, creado: FieldValue.serverTimestamp(), editado: null });
   }
 

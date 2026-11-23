@@ -26,8 +26,9 @@ service cloud.firestore {
       allow create: if isSignedIn()
         && request.resource.data.keys().hasOnly(['uid', 'nombre', 'texto', 'nota', 'creado', 'editado'])
         && request.resource.data.uid == request.auth.uid
-        && request.resource.data.nombre is string
-        && request.resource.data.nombre.size() >= 1 && request.resource.data.nombre.size() <= 80
+        // El nombre tiene que ser el de la cuenta de Google con la que se ha iniciado sesión: nadie puede
+        // publicar como "NetM" u otra persona escribiendo directamente en la base de datos.
+        && request.resource.data.nombre == request.auth.token.get('name', '')
         && request.resource.data.creado == request.time
         && request.resource.data.editado == null
         && isValidContent(request.resource.data);
