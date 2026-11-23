@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="es" class="pre-intro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="legalPage.meta">Aviso legal, privacidad y cookies — NetM</title>
+  <meta name="description" content="Aviso legal, política de privacidad y política de cookies de NetM, estudio de diseño y desarrollo web." data-i18n-attr="content:legalPage.description">
+  <meta name="theme-color" content="#050d1c">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23050d1c'/%3E%3Cg fill='none' stroke-width='3.2'%3E%3Cpath d='M22.5 5 L16 15.5' stroke='%233b5bff'/%3E%3Cpath d='M9.6 6v20M22.4 6v20M8.5 5L23.5 27' stroke='%23e6f4f6'/%3E%3C/g%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script src="js/tailwind-config.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous"></script>
+  <script defer src="js/interface.js"></script>
+  <script defer src="js/legal.js"></script>
+
+  <link rel="stylesheet" href="css/base.css">
+</head>
+
+<body class="page bg-ink font-sans text-ice antialiased">
+  <a href="#contenido" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-ice focus:px-4 focus:py-2 focus:text-ink" data-i18n="skip">Saltar al contenido</a>
+
+  <div class="deep-glow pointer-events-none fixed inset-0 z-0" aria-hidden="true"></div>
+  <div id="pointer-glow" class="pointer-events-none fixed z-0" aria-hidden="true"></div>
+  <div id="cursor-circle" class="pointer-events-none fixed z-[80]" aria-hidden="true"></div>
+
+  <header class="fixed inset-x-0 top-0 z-30 border-b border-white/[0.07] bg-ink/60 backdrop-blur-xl">
+    <nav class="mx-auto flex h-16 max-w-[110rem] items-center justify-between px-5 md:px-10" aria-label="Principal" data-i18n-attr="aria-label:nav.main">
+      <a href="index.html" class="block" aria-label="NetM, ir a la portada" data-i18n-attr="aria-label:proj.navHome">
+        <span class="brand text-2xl">
+          <svg class="brand-mark" viewBox="150 96 212 320" aria-hidden="true"><defs><clipPath id="nm-nav"><rect x="150" y="96" width="212" height="320"/></clipPath></defs><g clip-path="url(#nm-nav)" fill="none" stroke-width="24"><path d="M362 80L256 256" stroke="#3b5bff"/><path d="M162 96V416M350 96V416M150 80L362 432" stroke="currentColor"/></g></svg>
+          <span class="brand-word">Net<b>M</b></span>
+        </span>
+      </a>
+      <div class="flex items-center gap-3 md:gap-8">
+        <a href="index.html" class="label hidden text-mute transition-colors hover:text-ice md:block" data-i18n="proj.back">← Volver</a>
+        <div class="lang-switch label" role="group" aria-label="Idioma" data-i18n-attr="aria-label:lang.group">
+          <button type="button" data-lang="es" lang="es" aria-pressed="true">ES</button>
+          <button type="button" data-lang="en" lang="en" aria-pressed="false">EN</button>
+          <button type="button" data-lang="eu" lang="eu" aria-pressed="false">EU</button>
+        </div>
+        <a href="index.html#contacto" class="label border min-[360px]:whitespace-nowrap border-white/25 px-3 py-2.5 transition-colors hover:border-brand hover:text-brandsoft sm:px-4" data-i18n="nav.cta">Pide tu web</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="contenido" class="relative z-10 px-5 pb-24 pt-32 md:px-10 md:pb-32 md:pt-44">
+    <div class="mx-auto max-w-[110rem]">
+      <p class="label mb-5 text-brandsoft" data-i18n="footer.legal">Legal</p>
+      <h1 class="font-display display-lg max-w-5xl font-black" data-i18n="legalPage.title">Transparencia, por escrito.</h1>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-ice/85" data-i18n="legalPage.lead">Quién está detrás de NetM, qué hacemos con tus datos y qué guarda esta web en tu navegador.</p>
+
+      <div class="mt-16 grid gap-12 lg:mt-24 lg:grid-cols-12 lg:gap-8">
+        <aside class="lg:col-span-3">
+          <nav class="legal-index lg:sticky lg:top-28" aria-label="Índice" data-i18n-attr="aria-label:legalPage.index">
+            <a href="#aviso-legal"><span class="label text-brandsoft">01</span><span data-i18n="legal.notice">Aviso legal</span></a>
+            <a href="#privacidad"><span class="label text-brandsoft">02</span><span data-i18n="legal.privacy">Política de privacidad</span></a>
+            <a href="#cookies"><span class="label text-brandsoft">03</span><span data-i18n="legal.cookies">Política de cookies</span></a>
+            <p class="label mt-6 text-faint" data-i18n="legalPage.updated">Actualizado el 23/11/2026</p>
+          </nav>
+        </aside>
+
+        <!-- ═══════════════ ESPAÑOL (versión que prevalece) ═══════════════ -->
+        <article class="legal-prose lg:col-span-8 lg:col-start-5" data-lang-block="es" data-no-split>
+          <section id="aviso-legal" class="legal-section">
+            <h2>Aviso legal</h2>
+            <h3>Titular de la web</h3>
+            <p>En cumplimiento del artículo 10 de la Ley 34/2002, de servicios de la sociedad de la información y de comercio electrónico (LSSI-CE), se informa de los datos del titular de esta web:</p>
+            <dl class="legal-data">
+              <div><dt>Titular</dt><dd>Harkaitz Ferreira, que actúa con el nombre comercial NetM</dd></div>
+              <div><dt>NIF</dt><dd>72587073Q</dd></div>
+              <div><dt>Domicilio</dt><dd>Urki Kalea 23, 20600 Eibar (Gipuzkoa), España</dd></div>
+              <div><dt>Correo electrónico</dt><dd><a href="mailto:netmsoporte@gmail.com">netmsoporte@gmail.com</a></dd></div>
+              <div><dt>Actividad</dt><dd>Diseño y desarrollo de páginas web</dd></div>
+            </dl>
+
+            <h3>Objeto y condiciones de uso</h3>
+            <p>Esta web presenta los servicios de diseño y desarrollo web de NetM, muestra proyectos realizados y permite contactar con nosotros y dejar opiniones. Navegar por ella es gratuito y no exige registro. Al usarla aceptas este aviso legal; si no estás de acuerdo, te pedimos que no la utilices.</p>
+            <p>Te comprometes a hacer un uso lícito de la web y a no emplearla para dañar a NetM ni a terceros, introducir programas maliciosos, enviar comunicaciones no solicitadas o intentar acceder a zonas o datos restringidos.</p>
+            <p>La información de la web sobre servicios es orientativa y no constituye una oferta vinculante. Las condiciones de cada encargo (alcance, precio y plazos) se acuerdan por escrito con cada cliente.</p>
+
+            <h3>Comentarios de los usuarios</h3>
+            <p>Para publicar una opinión hay que iniciar sesión con una cuenta de Google y tener al menos 14 años. Quien comenta es responsable de lo que publica y se compromete a no incluir contenido ilícito, ofensivo, discriminatorio, publicitario o que vulnere derechos de terceros, ni datos personales de otras personas.</p>
+            <p>NetM no revisa los comentarios antes de publicarlos, pero puede retirar sin previo aviso los que incumplan estas normas. Si ves un comentario inadecuado, escríbenos a <a href="mailto:netmsoporte@gmail.com">netmsoporte@gmail.com</a> y lo revisaremos con rapidez.</p>
+
+            <h3>Propiedad intelectual e industrial</h3>
+            <p>El diseño, los textos, el código, los gráficos, el logotipo y el nombre NetM pertenecen a su titular o se usan con licencia. Queda prohibida su reproducción, distribución o transformación sin autorización, salvo para uso personal y privado. Puedes enlazar a cualquier página de la web libremente.</p>
+            <p>Las capturas de proyectos de clientes se muestran con su consentimiento y sus marcas pertenecen a sus respectivos titulares.</p>
+
+            <h3>Enlaces externos</h3>
+            <p>La web contiene enlaces a otras webs, entre ellas proyectos de NetM y servicios de terceros. No controlamos ni respondemos de su contenido ni de sus políticas de privacidad.</p>
+
+            <h3>Responsabilidad</h3>
+            <p>Trabajamos para que la web funcione correctamente y su información sea exacta, pero no garantizamos la ausencia de errores ni de interrupciones. NetM no responde de los daños derivados de un uso indebido de la web ni de causas ajenas a su control.</p>
+
+            <h3>Legislación aplicable y jurisdicción</h3>
+            <p>Este aviso se rige por la legislación española. Para cualquier controversia serán competentes los juzgados y tribunales que correspondan conforme a la ley; si eres consumidor, los de tu domicilio. También puedes acudir a la plataforma europea de resolución de litigios en línea: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a>.</p>
+          </section>
+
+          <section id="privacidad" class="legal-section">
+            <h2>Política de privacidad</h2>
+            <p>Esta política explica cómo tratamos tus datos personales de acuerdo con el Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD).</p>
+
+            <h3>Responsable del tratamiento</h3>
+            <p>Harkaitz Ferreira (NetM), NIF 72587073Q, Urki Kalea 23, 20600 Eibar (Gipuzkoa), España. Contacto: <a href="mailto:netmsoporte@gmail.com">netmsoporte@gmail.com</a>.</p>
+
+            <h3>Qué datos tratamos, para qué y con qué base legal</h3>
+            <div class="legal-table" role="region" aria-label="Tratamientos de datos" tabindex="0">
+              <table>
+                <thead><tr><th>Tratamiento</th><th>Datos</th><th>Finalidad</th><th>Base legal</th><th>Plazo de conservación</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>Formulario de contacto</td>
+                    <td>Nombre, email, tipo de web, página de referencia, mensaje y foto si la adjuntas.</td>
+                    <td>Responder a tu solicitud y, si lo pides, preparar un presupuesto.</td>
+                    <td>Aplicación de medidas precontractuales a petición tuya y tu consentimiento (art. 6.1.b y 6.1.a RGPD).</td>
+                    <td>Mientras dure la conversación y hasta 1 año después del último contacto. Si se firma un encargo, durante los plazos legales de facturación (hasta 6 años).</td>
+                  </tr>
+                  <tr>
+                    <td>Comentarios y opiniones</td>
+                    <td>Nombre de tu cuenta de Google, identificador interno, email de la cuenta (solo en el sistema de inicio de sesión), texto, nota y fecha.</td>
+                    <td>Publicar tu opinión en la web y permitirte editarla o borrarla.</td>
+                    <td>Tu consentimiento al publicarla (art. 6.1.a RGPD).</td>
+                    <td>Hasta que borres el comentario o lo retiremos. La cuenta de inicio de sesión se elimina si nos lo pides.</td>
+                  </tr>
+                  <tr>
+                    <td>Navegación</td>
+                    <td>Dirección IP y datos técnicos del navegador.</td>
+                    <td>Servir la web y sus recursos y mantener su seguridad.</td>
+                    <td>Interés legítimo en prestar un servicio seguro (art. 6.1.f RGPD).</td>
+                    <td>El tiempo que fijen los registros técnicos de cada proveedor.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>El nombre de tu cuenta de Google, tu comentario y tu nota son públicos: los ve cualquier visitante. Tu email nunca se muestra. No usamos tus datos para enviarte publicidad ni tomamos decisiones automatizadas sobre ti.</p>
+
+            <h3>Quién más accede a los datos</h3>
+            <p>No vendemos ni cedemos tus datos. Para que la web funcione recurrimos a estos proveedores, que actúan como encargados del tratamiento o prestan el servicio técnico:</p>
+            <ul>
+              <li><strong>FormSubmit</strong> (formsubmit.co): reenvía a nuestro correo los mensajes del formulario de contacto.</li>
+              <li><strong>Google</strong> (Gmail y Firebase): recibe en nuestro buzón los mensajes de contacto, gestiona el inicio de sesión con Google y guarda los comentarios.</li>
+              <li><strong>Proveedores de recursos web</strong>: Google Fonts (tipografías), Cloudflare cdnjs y jsDelivr (librerías de animación y 3D) y Tailwind CSS (estilos). Al cargar la web, tu navegador les envía tu dirección IP.</li>
+              <li><strong>GitHub Pages</strong> (GitHub, Inc.): aloja la web y guarda registros técnicos de las visitas.</li>
+            </ul>
+            <p>Algunos de estos proveedores pueden tratar datos fuera del Espacio Económico Europeo, sobre todo en Estados Unidos. Google y GitHub están adheridas al Marco de Privacidad de Datos UE-EE. UU., reconocido por la Comisión Europea. Cuando no exista una garantía equivalente, como en el reenvío del formulario de contacto, la transferencia se basa en que es necesaria para atender la solicitud que tú nos haces (art. 49.1.b RGPD).</p>
+
+            <h3>Tus derechos</h3>
+            <p>Puedes ejercer en cualquier momento tus derechos de acceso, rectificación, supresión, oposición, limitación del tratamiento y portabilidad, así como retirar tu consentimiento sin que afecte a lo tratado antes. Escríbenos a <a href="mailto:netmsoporte@gmail.com">netmsoporte@gmail.com</a> indicando qué derecho quieres ejercer; te responderemos en el plazo máximo de un mes. Para borrar un comentario propio basta con pulsar «Borrar» en la caja de comentarios.</p>
+            <p>Si consideras que no hemos tratado bien tus datos, puedes reclamar ante la Agencia Española de Protección de Datos (<a href="https://www.aepd.es" target="_blank" rel="noopener">www.aepd.es</a>).</p>
+
+            <h3>Menores de edad</h3>
+            <p>La web no se dirige a menores de 14 años. Si tienes menos de 14 años, no nos envíes datos ni publiques comentarios sin el consentimiento de tus padres o tutores.</p>
+
+            <h3>Seguridad y cambios</h3>
+            <p>Aplicamos medidas técnicas y organizativas para proteger tus datos: conexión cifrada, acceso restringido al buzón de NetM y reglas en la base de datos que solo dejan editar o borrar a quien corresponde. Si cambiamos esta política, publicaremos aquí la nueva versión con su fecha.</p>
+          </section>
+
+          <section id="cookies" class="legal-section">
+            <h2>Política de cookies</h2>
+            <p>Las cookies y tecnologías parecidas (como el almacenamiento local del navegador) guardan pequeños datos en tu dispositivo. <strong>NetM no usa cookies de publicidad, de analítica ni de seguimiento.</strong> Solo usamos almacenamiento técnico, necesario para que funcionen cosas que tú mismo pides. Por eso, según el artículo 22.2 de la LSSI-CE, no hace falta pedirte consentimiento, aunque te informamos de todo.</p>
+            <div class="legal-table" role="region" aria-label="Almacenamiento que usa la web" tabindex="0">
+              <table>
+                <thead><tr><th>Nombre</th><th>Tipo</th><th>Para qué sirve</th><th>Duración</th></tr></thead>
+                <tbody>
+                  <tr><td><code>netm-lang</code></td><td>Almacenamiento local (propio)</td><td>Recordar el idioma que eliges.</td><td>Hasta que lo borres en tu navegador.</td></tr>
+                  <tr><td><code>netm-dive</code></td><td>Almacenamiento de sesión (propio)</td><td>Hacer la transición animada al entrar en la página de proyectos.</td><td>Se borra al instante, en cuanto se usa.</td></tr>
+                  <tr><td>Sesión de Firebase</td><td>Almacenamiento local (Google Firebase)</td><td>Mantener iniciada tu sesión de Google para editar o borrar tus comentarios. Solo se crea si inicias sesión.</td><td>Hasta que pulses «Cerrar sesión».</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Si inicias sesión con Google, la ventana de Google puede usar sus propias cookies en sus dominios, según su <a href="https://policies.google.com/technologies/cookies" target="_blank" rel="noopener">política de cookies</a>. Las webs a las que enlazamos (por ejemplo, las del desplegable AdSense) tienen sus propias políticas.</p>
+
+            <h3>Cómo borrar o bloquear el almacenamiento</h3>
+            <p>Puedes borrar estos datos o impedir que se guarden desde la configuración de tu navegador: <a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener">Chrome</a>, <a href="https://support.mozilla.org/es/kb/Borrar%20cookies" target="_blank" rel="noopener">Firefox</a>, <a href="https://support.apple.com/es-es/guide/safari/sfri11471/mac" target="_blank" rel="noopener">Safari</a> o <a href="https://support.microsoft.com/es-es/microsoft-edge/eliminar-las-cookies-en-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" rel="noopener">Edge</a>. La web seguirá funcionando, pero no recordará tu idioma ni podrás mantener la sesión para comentar.</p>
+          </section>
+        </article>
+
+        <!-- ═══════════════ ENGLISH (translation) ═══════════════ -->
+        <article class="legal-prose lg:col-span-8 lg:col-start-5" data-lang-block="en" lang="en" data-no-split hidden>
+          <p class="legal-note">This is a translation for your convenience. If there is any discrepancy, the Spanish version prevails.</p>
+          <section id="legal-notice-en" class="legal-section" data-anchor="aviso-legal">
+            <h2>Legal notice</h2>
+            <h3>Website owner</h3>
+            <p>Under article 10 of Spanish Law 34/2002 on information society services and e-commerce (LSSI-CE), the owner of this website is:</p>
+            <dl class="legal-data">
+              <div><dt>Owner</dt><dd>Harkaitz Ferreira, trading as NetM</dd></div>
+              <div><dt>Tax ID (NIF)</dt><dd>72587073Q</dd></div>
+              <div><dt>Address</dt><dd>Urki Kalea 23, 20600 Eibar (Gipuzkoa), Spain</dd></div>
+              <div><dt>Email</dt><dd><a href="mailto:netmsoporte@gmail.com">netmsoporte@gmail.com</a></dd></div>
+              <div><dt>Activity</dt><dd>Website design and development</dd></div>
+            </dl>
+
+            <h3>Purpose and terms of use</h3>
+            <p>This website presents NetM’s web design and development services, shows past projects and lets you contact us and leave reviews. Browsing is free and requires no registration. By using it you accept this legal notice; if you don’t agree, please don’t use it.</p>
+            <p>You agree to use the website lawfully and not to use it to harm NetM or others, introduce malware, send unsolicited messages or try to access restricted areas or data.</p>
+            <p>Information about our services is for guidance only and is not a binding offer. The terms of each project (scope, price and deadlines) are agreed in writing with each client.</p>
+
+            <h3>User comments</h3>
+            <p>To post a review you must sign in with a Google account and be at least 14 years old. You are responsible for what you post and agree not to include unlawful, offensive, discriminatory or advertising content, content that infringes third-party rights, or other people’s personal data.</p>
+            <p>NetM does not review comments before they are published, but may remove those that break these rules without notice. If you see an inappropriate comment, email <a href="mailto:netmsoporte@gmail.com">netmsoporte@gmail.com</a> and we’ll review it promptly.</p>
+
+            <h3>Intellectual and industrial property</h3>
+            <p>The design, text, code, graphics, logo and the NetM name belong to the owner or are used under licence. Reproducing, distributing or transforming them without permission is prohibited, except for personal and private use. You are free to link to any page of this website.</p>
+            <p>Screenshots of client projects are shown with their consent and their trademarks belong to their respective owners.</p>
+
+            <h3>External links</h3>
+            <p>The website links to other websites, including NetM projects and third-party services. We don’t control and aren’t responsible for their content or privacy policies.</p>
+
+            <h3>Liability</h3>
+            <p>We work to keep the website running properly and its information accurate, but we can’t guarantee it is free of errors or interruptions. NetM is not liable for damage caused by misuse of the website or by causes beyond its control.</p>
+
+            <h3>Governing law and jurisdiction</h3>
+            <p>This notice is governed by Spanish law. Any dispute will be heard by the courts that have jurisdiction under the law; if you are a consumer, those of your place of residence. You can also use the EU online dispute resolution platform: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a>.</p>
+          </section>
+
+          <section id="privacy-en" class="legal-section" data-anchor="privacidad">
+            <h2>Privacy policy</h2>
+            <p>This policy explains how we process your personal data under Regulation (EU) 2016/679 (GDPR) and Spanish Organic Law 3/2018 on data protection (LOPDGDD).</p>
+
+            <h3>Data controller</h3>
+            <p>Harkaitz Ferreira (NetM), NIF 72587073Q, Urki Kalea 23, 20600 Eibar (Gipuzkoa), Spain. Contact: <a href="mailto:netmsoporte@gmail.com">netmsoporte@gmail.com</a>.</p>
+
+            <h3>What data we process, why, and on what legal basis</h3>
+            <div class="legal-table" role="region" aria-label="Data processing" tabindex="0">
+              <table>
+                <thead><tr><th>Processing</th><th>Data</th><th>Purpose</th><th>Legal basis</th><th>Retention</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>Contact form</td>
+                    <td>Name, email, type of website, reference website, message and photo if you attach one.</td>
+                    <td>Replying to your request and, if you ask, preparing a quote.</td>
+                    <td>Pre-contractual steps at your request and your consent (art. 6.1.b and 6.1.a GDPR).</td>
+                    <td>For as long as the conversation lasts and up to 1 year after the last contact. If a project is agreed, for the legal invoicing periods (up to 6 years).</td>
+                  </tr>
+                  <tr>
+                    <td>Comments and reviews</td>
+                    <td>Your Google account name, internal ID, account email (only in the sign-in system), text, score and date.</td>
+                    <td>Publishing your review on the website and letting you edit or delete it.</td>
+                    <td>Your consent when you post it (art. 6.1.a GDPR).</td>
+                    <td>Until you delete the comment or we remove it. The sign-in account is deleted if you ask us.</td>
+                  </tr>
+                  <tr>
+                    <td>Browsing</td>
+                    <td>IP address and technical browser data.</td>
+                    <td>Serving the website and its resources and keeping it secure.</td>
+                    <td>Legitimate interest in providing a secure service (art. 6.1.f GDPR).</td>
+                    <td>As long as each provider keeps its technical logs.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Your Google account name, comment and score are public: any visitor can see them. Your email is never shown. We don’t use your data to send you advertising or to make automated decisions about you.</p>
+
+            <h3>Who else has access to the data</h3>
+            <p>We don’t sell or share your data. To run the website we rely on these providers, who act as data processors or provide the technical service:</p>
+            <ul>
+              <li><strong>FormSubmit</strong> (formsubmit.co): forwards contact form messages to our inbox.</li>
+              <li><strong>Google</strong> (Gmail and Firebase): receives contact messages in our inbox, handles Google sign-in and stores the comments.</li>
+              <li><strong>Web resource providers</strong>: Google Fonts (typefaces), Cloudflare cdnjs and jsDelivr (animation and 3D libraries) and Tailwind CSS (styles). When the website loads, your browser sends them your IP address.</li>
+              <li><strong>GitHub Pages</strong> (GitHub, Inc.): hosts the website and keeps technical visit logs.</li>
+            </ul>
+            <p>Some of these providers may process data outside the European Economic Area, mainly in the United States. Google and GitHub participate in the EU-US Data Privacy Framework recognised by the European Commission. Where no equivalent safeguard exists, as with forwarding the contact form, the transfer is based on it being necessary to handle the request you make (art. 49.1.b GDPR).</p>
+
+            <h3>Your rights</h3>
+            <p>You can exercise your rights of access, rectification, erasure, objection, restriction and portability at any time, and withdraw your consent without affecting prior processing. Email <a href="mailto:netmsoporte@gmail.com">netmsoporte@gmail.com</a> stating which right you want to exercise; we’ll reply within one month. To delete your own comment, just tap “Delete” in the comment box.</p>
+            <p>If you believe we haven’t handled your data properly, you can complain to the Spanish Data Protection Agency (<a href="https://www.aepd.es" target="_blank" rel="noopener">www.aepd.es</a>) or to the authority of your country.</p>
+
+            <h3>Minors</h3>
+            <p>The website is not aimed at children under 14. If you are under 14, don’t send us data or post comments without the consent of your parents or guardians.</p>
+
+            <h3>Security and changes</h3>
+            <p>We apply technical and organisational measures to protect your data: encrypted connections, restricted access to the NetM inbox and database rules that only let the right person edit or delete. If we change this policy, we’ll publish the new version here with its date.</p>
+          </section>
+
+          <section id="cookies-en" class="legal-section" data-anchor="cookies">
+            <h2>Cookie policy</h2>
+            <p>Cookies and similar technologies (such as the browser’s local storage) save small pieces of data on your device. <strong>NetM uses no advertising, analytics or tracking cookies.</strong> We only use technical storage needed for features you ask for. Under article 22.2 of the LSSI-CE no consent is required for this, but we tell you about all of it.</p>
+            <div class="legal-table" role="region" aria-label="Storage used by the website" tabindex="0">
+              <table>
+                <thead><tr><th>Name</th><th>Type</th><th>Purpose</th><th>Duration</th></tr></thead>
+                <tbody>
+                  <tr><td><code>netm-lang</code></td><td>Local storage (first-party)</td><td>Remembering the language you choose.</td><td>Until you clear it in your browser.</td></tr>
+                  <tr><td><code>netm-dive</code></td><td>Session storage (first-party)</td><td>Playing the animated transition into the projects page.</td><td>Deleted immediately once used.</td></tr>
+                  <tr><td>Firebase session</td><td>Local storage (Google Firebase)</td><td>Keeping you signed in with Google so you can edit or delete your comments. Only created if you sign in.</td><td>Until you tap “Sign out”.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>If you sign in with Google, Google’s window may use its own cookies on its domains, under its <a href="https://policies.google.com/technologies/cookies" target="_blank" rel="noopener">cookie policy</a>. The websites we link to (for example, those in the AdSense menu) have their own policies.</p>
+
+            <h3>How to delete or block storage</h3>
+            <p>You can delete this data or stop it from being saved in your browser settings: <a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener">Chrome</a>, <a href="https://support.mozilla.org/kb/clear-cookies-and-site-data-firefox" target="_blank" rel="noopener">Firefox</a>, <a href="https://support.apple.com/guide/safari/sfri11471/mac" target="_blank" rel="noopener">Safari</a> or <a href="https://support.microsoft.com/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" rel="noopener">Edge</a>. The website will keep working, but it won’t remember your language and you won’t be able to stay signed in to comment.</p>
+          </section>
+        </article>
+        <!-- ═══════════════ EUSKARA (itzulpena) ═══════════════ -->
+        <article class="legal-prose lg:col-span-8 lg:col-start-5" data-lang-block="eu" lang="eu" data-no-split hidden>
+          <p class="legal-note">Itzulpen hau zure erosotasunerako da. Desadostasunik badago, gaztelaniazko bertsioa nagusituko da.</p>
+          <section id="lege-oharra-eu" class="legal-section" data-anchor="aviso-legal">
+            <h2>Lege-oharra</h2>
+            <h3>Webgunearen titularra</h3>
+            <p>Informazioaren gizartearen zerbitzuei eta merkataritza elektronikoari buruzko 34/2002 Legearen (LSSI-CE) 10. artikulua betez, hauek dira webgune honen titularraren datuak:</p>
+            <dl class="legal-data">
+              <div><dt>Titularra</dt><dd>Harkaitz Ferreira, NetM izen komertzialarekin jarduten duena</dd></div>
+              <div><dt>IFZ</dt><dd>72587073Q</dd></div>
+              <div><dt>Helbidea</dt><dd>Urki Kalea 23, 20600 Eibar (Gipuzkoa), Espainia</dd></div>
+              <div><dt>Helbide elektronikoa</dt><dd><a href="mailto:netmsoporte@gmail.com">netmsoporte@gmail.com</a></dd></div>
+              <div><dt>Jarduera</dt><dd>Webguneen diseinua eta garapena</dd></div>
+            </dl>
+
+            <h3>Xedea eta erabilera-baldintzak</h3>
+            <p>Webgune honek NetM-ren web diseinu eta garapen zerbitzuak aurkezten ditu, egindako proiektuak erakusten ditu, eta gurekin harremanetan jartzeko eta iritziak uzteko aukera ematen du. Bertan nabigatzea doakoa da eta ez du erregistrorik eskatzen. Webgunea erabiltzean lege-ohar hau onartzen duzu; ados ez bazaude, ez erabili, mesedez.</p>
+            <p>Webgunea legez erabiltzeko konpromisoa hartzen duzu, eta ez duzu erabiliko NetM-ri edo hirugarrenei kalte egiteko, programa gaiztoak sartzeko, eskatu gabeko mezuak bidaltzeko edo mugatutako eremu edo datuetara sartzen saiatzeko.</p>
+            <p>Zerbitzuei buruzko informazioa orientagarria da, eta ez da eskaintza loteslea. Enkargu bakoitzaren baldintzak (irismena, prezioa eta epeak) bezero bakoitzarekin idatziz adosten dira.</p>
+
+            <h3>Erabiltzaileen iruzkinak</h3>
+            <p>Iritzi bat argitaratzeko, Google kontu batekin saioa hasi behar da eta gutxienez 14 urte izan. Iruzkina egiten duena da argitaratzen duenaren erantzule, eta konpromisoa hartzen du eduki ilegalik, iraingarririk, diskriminatzailerik edo publizitaterik ez sartzeko, ezta hirugarrenen eskubideak urratzen dituen edukirik edo beste pertsona batzuen datu pertsonalik ere.</p>
+            <p>NetM-k ez ditu iruzkinak argitaratu aurretik berrikusten, baina arau hauek betetzen ez dituztenak aurretiaz abisatu gabe ken ditzake. Iruzkin desegoki bat ikusten baduzu, idatzi <a href="mailto:netmsoporte@gmail.com">netmsoporte@gmail.com</a> helbidera eta azkar berrikusiko dugu.</p>
+
+            <h3>Jabetza intelektuala eta industriala</h3>
+            <p>Diseinua, testuak, kodea, grafikoak, logotipoa eta NetM izena titularrarenak dira edo lizentziapean erabiltzen dira. Debekatuta dago horiek baimenik gabe erreproduzitzea, banatzea edo eraldatzea, erabilera pertsonal eta pribatuan izan ezik. Webguneko edozein orritara lotura egin dezakezu askatasunez.</p>
+            <p>Bezeroen proiektuen pantaila-argazkiak haien baimenarekin erakusten dira, eta haien markak dagozkien titularrenak dira.</p>
+
+            <h3>Kanpoko loturak</h3>
+            <p>Webguneak beste webgune batzuetarako loturak ditu, besteak beste NetM-ren proiektuetarakoak eta hirugarrenen zerbitzuetarakoak. Ez ditugu haien edukiak eta pribatutasun-politikak kontrolatzen, eta ez gara haien erantzule.</p>
+
+            <h3>Erantzukizuna</h3>
+            <p>Webguneak ondo funtziona dezan eta bertako informazioa zehatza izan dadin lan egiten dugu, baina ezin dugu bermatu akatsik edo etenik izango ez denik. NetM ez da webgunearen erabilera desegokitik edo bere kontroletik kanpoko arrazoietatik eratorritako kalteen erantzule.</p>
+
+            <h3>Legedia eta jurisdikzioa</h3>
+            <p>Ohar hau Espainiako legediak arautzen du. Edozein gatazka legearen arabera eskumena duten epaitegiek ebatziko dute; kontsumitzailea bazara, zure bizilekukoek. Europako lineako auziak ebazteko plataformara ere jo dezakezu: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a>.</p>
+          </section>
+
+          <section id="pribatutasuna-eu" class="legal-section" data-anchor="privacidad">
+            <h2>Pribatutasun-politika</h2>
+            <p>Politika honek azaltzen du nola tratatzen ditugun zure datu pertsonalak, (EB) 2016/679 Erregelamenduaren (DBEO) eta Datu Pertsonalak Babesteko eta eskubide digitalak bermatzeko 3/2018 Lege Organikoaren (LOPDGDD) arabera.</p>
+
+            <h3>Tratamenduaren arduraduna</h3>
+            <p>Harkaitz Ferreira (NetM), IFZ 72587073Q, Urki Kalea 23, 20600 Eibar (Gipuzkoa), Espainia. Harremana: <a href="mailto:netmsoporte@gmail.com">netmsoporte@gmail.com</a>.</p>
+
+            <h3>Zer datu tratatzen ditugun, zertarako eta zein oinarri juridikorekin</h3>
+            <div class="legal-table" role="region" aria-label="Datuen tratamenduak" tabindex="0">
+              <table>
+                <thead><tr><th>Tratamendua</th><th>Datuak</th><th>Helburua</th><th>Oinarri juridikoa</th><th>Gordetzeko epea</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>Harremanetarako formularioa</td>
+                    <td>Izena, emaila, webgune mota, erreferentziazko orria, mezua eta argazkia, eransten baduzu.</td>
+                    <td>Zure eskaerari erantzutea eta, hala eskatzen baduzu, aurrekontu bat prestatzea.</td>
+                    <td>Zuk eskatuta kontratu aurreko neurriak aplikatzea eta zure baimena (DBEOren 6.1.b eta 6.1.a art.).</td>
+                    <td>Elkarrizketak irauten duen bitartean, eta azken harremanetik urtebetera arte. Enkargu bat sinatzen bada, fakturazioaren legezko epeetan (6 urtera arte).</td>
+                  </tr>
+                  <tr>
+                    <td>Iruzkinak eta iritziak</td>
+                    <td>Zure Google kontuaren izena, barne-identifikatzailea, kontuaren emaila (saio-hasierako sisteman soilik), testua, nota eta data.</td>
+                    <td>Zure iritzia webgunean argitaratzea, eta hura editatzeko edo ezabatzeko aukera ematea.</td>
+                    <td>Zure baimena, argitaratzean (DBEOren 6.1.a art.).</td>
+                    <td>Iruzkina ezabatzen duzun arte edo guk kentzen dugun arte. Saio-hasierako kontua ezabatu egingo da hala eskatzen badiguzu.</td>
+                  </tr>
+                  <tr>
+                    <td>Nabigazioa</td>
+                    <td>IP helbidea eta nabigatzailearen datu teknikoak.</td>
+                    <td>Webgunea eta haren baliabideak zerbitzatzea eta segurtasuna mantentzea.</td>
+                    <td>Zerbitzu segurua emateko interes legitimoa (DBEOren 6.1.f art.).</td>
+                    <td>Hornitzaile bakoitzaren erregistro teknikoek ezartzen duten denbora.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Zure Google kontuaren izena, iruzkina eta nota publikoak dira: edozein bisitarik ikus ditzake. Zure emaila ez da inoiz erakusten. Ez ditugu zure datuak publizitatea bidaltzeko erabiltzen, eta ez dugu zuri buruzko erabaki automatizaturik hartzen.</p>
+
+            <h3>Nork beste du datuetarako sarbidea</h3>
+            <p>Ez ditugu zure datuak saltzen ezta lagatzen ere. Webguneak funtziona dezan, hornitzaile hauek erabiltzen ditugu; tratamenduaren eragile gisa jarduten dute edo zerbitzu teknikoa ematen dute:</p>
+            <ul>
+              <li><strong>FormSubmit</strong> (formsubmit.co): harremanetarako formularioko mezuak gure postara birbidaltzen ditu.</li>
+              <li><strong>Google</strong> (Gmail eta Firebase): harremanetarako mezuak gure postontzian jasotzen ditu, Googlerekin saioa hastea kudeatzen du eta iruzkinak gordetzen ditu.</li>
+              <li><strong>Web baliabideen hornitzaileak</strong>: Google Fonts (letra-tipoak), Cloudflare cdnjs eta jsDelivr (animazio eta 3D liburutegiak) eta Tailwind CSS (estiloak). Webgunea kargatzean, zure nabigatzaileak zure IP helbidea bidaltzen die.</li>
+              <li><strong>GitHub Pages</strong> (GitHub, Inc.): webgunea ostatatzen du eta bisiten erregistro teknikoak gordetzen ditu.</li>
+            </ul>
+            <p>Hornitzaile horietako batzuek Europako Esparru Ekonomikotik kanpo trata ditzakete datuak, batez ere Estatu Batuetan. Google eta GitHub EB-AEB Datuen Pribatutasun Esparrura atxikita daude, Europako Batzordeak onartua. Berme baliokiderik ez dagoenean, harremanetarako formularioaren birbidalketan bezala, transferentzia zuk egiten diguzun eskaera kudeatzeko beharrezkoa izatean oinarritzen da (DBEOren 49.1.b art.).</p>
+
+            <h3>Zure eskubideak</h3>
+            <p>Edozein unetan erabil ditzakezu sarbide-, zuzenketa-, ezabaketa-, aurkaratze-, tratamendua mugatzeko eta eramangarritasun-eskubideak, eta zure baimena erretira dezakezu, aurretik egindako tratamenduari eragin gabe. Idatzi <a href="mailto:netmsoporte@gmail.com">netmsoporte@gmail.com</a> helbidera, zein eskubide erabili nahi duzun adieraziz; gehienez hilabeteko epean erantzungo dizugu. Zure iruzkin bat ezabatzeko, nahikoa da iruzkinen kutxan «Ezabatu» sakatzea.</p>
+            <p>Zure datuak behar bezala tratatu ez ditugula uste baduzu, erreklamazioa aurkez dezakezu Datuak Babesteko Espainiako Bulegoan (<a href="https://www.aepd.es" target="_blank" rel="noopener">www.aepd.es</a>).</p>
+
+            <h3>Adingabeak</h3>
+            <p>Webgunea ez dago 14 urtetik beherakoei zuzendua. 14 urte baino gutxiago badituzu, ez bidali daturik eta ez argitaratu iruzkinik zure guraso edo tutoreen baimenik gabe.</p>
+
+            <h3>Segurtasuna eta aldaketak</h3>
+            <p>Neurri tekniko eta antolakuntzakoak aplikatzen ditugu zure datuak babesteko: konexio zifratua, NetM-ren postontzirako sarbide mugatua eta datu-baseko arauak, dagokionari bakarrik editatzen edo ezabatzen uzten diotenak. Politika hau aldatzen badugu, bertsio berria hemen argitaratuko dugu, bere datarekin.</p>
+          </section>
+
+          <section id="cookieak-eu" class="legal-section" data-anchor="cookies">
+            <h2>Cookie-politika</h2>
+            <p>Cookieek eta antzeko teknologiek (nabigatzailearen biltegiratze lokalak, adibidez) datu txikiak gordetzen dituzte zure gailuan. <strong>NetM-k ez du publizitate-, analitika- edo jarraipen-cookierik erabiltzen.</strong> Biltegiratze teknikoa baino ez dugu erabiltzen, zuk zeuk eskatzen dituzun funtzioak ibil daitezen. Horregatik, LSSI-CEren 22.2 artikuluaren arabera, ez da zure baimena eskatu behar, nahiz eta dena jakinarazten dizugun.</p>
+            <div class="legal-table" role="region" aria-label="Webguneak erabiltzen duen biltegiratzea" tabindex="0">
+              <table>
+                <thead><tr><th>Izena</th><th>Mota</th><th>Zertarako</th><th>Iraupena</th></tr></thead>
+                <tbody>
+                  <tr><td><code>netm-lang</code></td><td>Biltegiratze lokala (berezkoa)</td><td>Aukeratzen duzun hizkuntza gogoratzea.</td><td>Zure nabigatzailean ezabatu arte.</td></tr>
+                  <tr><td><code>netm-dive</code></td><td>Saioko biltegiratzea (berezkoa)</td><td>Proiektuen orrira sartzean trantsizio animatua egitea.</td><td>Berehala ezabatzen da, erabili bezain laster.</td></tr>
+                  <tr><td>Firebase saioa</td><td>Biltegiratze lokala (Google Firebase)</td><td>Google saioa hasita mantentzea, zure iruzkinak editatu edo ezabatu ahal izateko. Saioa hasten baduzu bakarrik sortzen da.</td><td>«Itxi saioa» sakatu arte.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Googlerekin saioa hasten baduzu, Googleren leihoak bere cookieak erabil ditzake bere domeinuetan, bere <a href="https://policies.google.com/technologies/cookies?hl=eu" target="_blank" rel="noopener">cookie-politikaren</a> arabera. Lotura egiten diegun webguneek (adibidez, AdSense zerrendakoek) beren politikak dituzte.</p>
+
+            <h3>Nola ezabatu edo blokeatu biltegiratzea</h3>
+            <p>Datu hauek ezabatu edo gorde ez daitezen eragotz dezakezu zure nabigatzailearen ezarpenetan: <a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener">Chrome</a>, <a href="https://support.mozilla.org/eu/kb/clear-cookies-and-site-data-firefox" target="_blank" rel="noopener">Firefox</a>, <a href="https://support.apple.com/es-es/guide/safari/sfri11471/mac" target="_blank" rel="noopener">Safari</a> edo <a href="https://support.microsoft.com/es-es/microsoft-edge/eliminar-las-cookies-en-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" rel="noopener">Edge</a>. Webguneak funtzionatzen jarraituko du, baina ez du zure hizkuntza gogoratuko, eta ezin izango duzu saioa hasita mantendu iruzkinak egiteko.</p>
+          </section>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/footer.js"></script>
+  <script src="js/lang/es.js"></script>
+  <script src="js/lang/en.js"></script>
+  <script src="js/lang/eu.js"></script>
+  <script src="js/i18n.js"></script>
+</body>
+</html>

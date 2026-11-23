@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="es" class="pre-intro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="meta.title">NetM — Desarrollamos tu página web</title>
+  <meta name="description" content="NetM es un estudio de diseño y desarrollo web. Creamos páginas web a medida, con animación 3D inmersiva, para comercios y eventos especiales." data-i18n-attr="content:meta.description">
+  <meta name="theme-color" content="#050d1c">
+  <meta property="og:title" content="NetM — Desarrollamos tu página web">
+  <meta property="og:description" content="Estudio de diseño y desarrollo web a medida para comercios y eventos especiales.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23050d1c'/%3E%3Cg fill='none' stroke-width='3.2'%3E%3Cpath d='M22.5 5 L16 15.5' stroke='%233b5bff'/%3E%3Cpath d='M9.6 6v20M22.4 6v20M8.5 5L23.5 27' stroke='%23e6f4f6'/%3E%3C/g%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script src="js/tailwind-config.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous"></script>
+  <script defer src="js/interface.js"></script>
+  <script defer src="js/modal.js"></script>
+  <script defer src="js/form.js"></script>
+  <script defer src="js/comments-config.js"></script>
+  <script defer src="js/comments.js"></script>
+  <script defer src="js/scene.js"></script>
+  <script defer src="js/adsense-data.js"></script>
+  <script defer src="js/adsense.js"></script>
+  <script defer src="js/home.js"></script>
+
+  <link rel="stylesheet" href="css/base.css">
+  <style>
+    .field {
+      width: 100%; background: transparent; color: #e6f4f6; padding: 0.7rem 0;
+      border: 0; border-bottom: 1px solid var(--hairline-strong); border-radius: 0;
+      transition: border-color 250ms var(--ease-out);
+    }
+    .field:focus { outline: none; border-bottom-color: #3b5bff; box-shadow: 0 2px 0 #3b5bff; }
+    .field::placeholder { color: #8398a6; }
+    .field-area { flex: 1; min-height: 16rem; resize: vertical; line-height: 1.65; padding: 1rem; border: 1px solid var(--hairline-strong); background: rgba(5, 13, 28, 0.35); }
+    .field-area:focus { border-color: #3b5bff; box-shadow: 0 0 0 1px #3b5bff; }
+    .field-area.is-short { flex: none; min-height: 9rem; }
+    .choice span { transition: background 200ms, color 200ms, border-color 200ms; }
+    .choice input:checked + span { background: #e6f4f6; color: #050d1c; border-color: #e6f4f6; }
+    .choice input:focus-visible + span { outline: 2px solid #7d90ff; outline-offset: 2px; }
+    .form-alert { color: #ffc38a; }
+    .honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    [data-dive], .is-over-pages { cursor: pointer; }
+    [data-slide] { will-change: transform; backface-visibility: hidden; }
+    /* Mientras entra, la tarjeta usa un cristal opaco sin desenfoque: se ve casi igual y se mueve sin tirones. */
+    .is-sliding .glass::before {
+      -webkit-backdrop-filter: none; backdrop-filter: none;
+      background: linear-gradient(150deg, rgba(24, 48, 74, 0.92), rgba(9, 20, 40, 0.94));
+    }
+    .enter-hint { transition: color 300ms var(--ease-out), border-color 300ms var(--ease-out); }
+    @media (hover: hover) { [data-dive]:hover .enter-hint { color: #7d90ff; border-color: #7d90ff; } }
+  </style>
+</head>
+
+<body class="page bg-ink font-sans text-ice antialiased">
+  <a href="#contenido" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-ice focus:px-4 focus:py-2 focus:text-ink" data-i18n="skip">Saltar al contenido</a>
+
+  <div class="deep-glow pointer-events-none fixed inset-0 z-0" aria-hidden="true"></div>
+  <canvas id="scene" class="pointer-events-none fixed left-0 top-0 z-0" aria-hidden="true"></canvas>
+  <div id="scene-veil" class="pointer-events-none fixed inset-0 z-0 bg-ink opacity-0" aria-hidden="true"></div>
+  <div id="pointer-glow" class="pointer-events-none fixed z-0" aria-hidden="true"></div>
+  <div id="cursor-circle" class="pointer-events-none fixed z-[80]" aria-hidden="true"></div>
+  <div id="dive-veil" class="dive-veil" aria-hidden="true"><p class="dive-veil-title"></p></div>
+
+  <div id="pages-hint" class="pages-hint pointer-events-none fixed left-0 top-0 z-20" aria-hidden="true">
+    <span class="pages-hint-ring"></span>
+    <span class="pages-hint-ring"></span>
+    <span class="pages-hint-label label" data-i18n="hint.press">Pulsa</span>
+  </div>
+
+  <div id="adsense-menu" class="adsense-modal" hidden>
+    <div class="adsense-backdrop" data-adsense-close></div>
+    <div class="adsense-panel glass isolate rounded-sm" role="dialog" aria-modal="true" aria-labelledby="adsense-title" aria-describedby="adsense-intro">
+      <svg class="adsense-rings" viewBox="0 0 400 400" aria-hidden="true"><g fill="none" stroke="currentColor"><circle cx="200" cy="200" r="40"/><circle cx="200" cy="200" r="85"/><circle cx="200" cy="200" r="135"/><circle cx="200" cy="200" r="190"/></g></svg>
+      <div class="relative flex items-start justify-between gap-6">
+        <div>
+          <p class="adsense-fx label flex items-center gap-2.5 text-brandsoft"><span class="h-1.5 w-1.5 rounded-full bg-brand" aria-hidden="true"></span><span data-i18n="adsense.label">Webs de NetM con anuncios</span></p>
+          <h2 id="adsense-title" class="adsense-fx mt-3 font-display display-lg font-black" data-no-split>AdSense<span class="text-aqua">.</span></h2>
+          <p id="adsense-intro" class="adsense-fx mt-4 max-w-md leading-relaxed text-ice/80" data-i18n="adsense.intro">Elige una de nuestras webs para visitarla. Se abre en una pestaña nueva.</p>
+        </div>
+        <button type="button" class="adsense-close label shrink-0 border border-white/25 px-3.5 py-2.5 transition-colors hover:border-brand hover:text-brandsoft" data-adsense-close data-i18n-html="close">Cerrar <span aria-hidden="true">✕</span></button>
+      </div>
+      <ul class="adsense-list relative mt-10 border-t border-white/15 md:mt-14"></ul>
+    </div>
+  </div>
+
+  <!-- Ventana grande del formulario de contacto -->
+  <div id="contact-dialog" class="dialog" hidden>
+    <div class="dialog-backdrop" data-dialog-close></div>
+    <div class="dialog-panel dialog-wide glass isolate rounded-sm" role="dialog" aria-modal="true" aria-labelledby="contact-dialog-title" data-no-split>
+      <svg class="dialog-rings" viewBox="0 0 400 400" aria-hidden="true"><g fill="none" stroke="currentColor"><circle cx="200" cy="200" r="40"/><circle cx="200" cy="200" r="85"/><circle cx="200" cy="200" r="135"/><circle cx="200" cy="200" r="190"/></g></svg>
+      <div class="relative flex items-start justify-between gap-6">
+        <div>
+          <p class="dialog-fx label flex items-center gap-2.5 text-brandsoft"><span class="h-1.5 w-1.5 rounded-full bg-brand" aria-hidden="true"></span><span data-i18n="contact.dialogLabel">Contacto</span></p>
+          <h2 id="contact-dialog-title" class="dialog-fx mt-3 font-display text-[clamp(2rem,5vw,4rem)] font-black leading-none" data-i18n="contact.dialogTitle">Cuéntanos tu web.</h2>
+        </div>
+        <button type="button" class="label shrink-0 border border-white/25 px-3.5 py-2.5 transition-colors hover:border-brand hover:text-brandsoft" data-dialog-close data-i18n-html="close">Cerrar <span aria-hidden="true">✕</span></button>
+      </div>
+
+      <form id="contact-form" class="relative mt-8 grid flex-1 gap-10 md:mt-12 md:grid-cols-12 md:gap-12" novalidate>
+        <div class="dialog-fx md:col-span-5">
+          <fieldset>
+            <legend class="label mb-3 text-mute" data-i18n="contact.for">Quiero crear una web para</legend>
+            <div class="flex flex-wrap gap-2">
+              <label class="choice cursor-pointer">
+                <input class="sr-only" type="radio" name="tipo" value="comercio" checked>
+                <span class="block border border-white/25 px-4 py-2.5 font-medium" data-i18n="contact.shop">Mi comercio</span>
+              </label>
+              <label class="choice cursor-pointer">
+                <input class="sr-only" type="radio" name="tipo" value="evento">
+                <span class="block border border-white/25 px-4 py-2.5 font-medium" data-i18n="contact.event">Mi evento</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="mt-7">
+            <label for="nombre" class="label text-mute" data-i18n="contact.name">Nombre</label>
+            <input id="nombre" name="nombre" class="field" type="text" autocomplete="name" maxlength="120" required>
+          </div>
+          <div class="mt-6">
+            <label for="email" class="label text-mute">Email</label>
+            <input id="email" name="email" class="field" type="email" autocomplete="email" maxlength="200" required aria-describedby="email-nota">
+            <p id="email-nota" class="mt-2 flex items-start gap-2 text-sm leading-snug text-mute">
+              <span class="mt-[0.45em] h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+              <span data-i18n="contact.emailNote">Nos pondremos en contacto contigo respondiendo a este email.</span>
+            </p>
+          </div>
+          <div class="mt-6">
+            <label for="referencia" class="label text-mute" data-i18n="contact.reference">Página de referencia (opcional)</label>
+            <input id="referencia" name="referencia" class="field" type="text" inputmode="url" autocomplete="url" maxlength="300" placeholder="https://" aria-describedby="referencia-nota">
+            <p id="referencia-nota" class="mt-2 text-sm leading-snug text-mute" data-i18n="contact.referenceNote">Una web que te guste o la que ya tienes.</p>
+          </div>
+          <div class="mt-6">
+            <p class="label mb-3 text-mute" id="foto-label" data-i18n="contact.photo">Foto (opcional)</p>
+            <label id="foto-drop" class="file-drop" for="foto">
+              <input id="foto" name="attachment" class="sr-only" type="file" accept="image/jpeg,image/png,image/webp,image/gif" aria-labelledby="foto-label">
+              <span class="file-drop-plus" aria-hidden="true">+</span>
+              <span>
+                <span class="block font-semibold" data-i18n="contact.photoPick">Añadir una foto</span>
+                <span class="mt-1 block text-sm text-mute" data-i18n="contact.photoHint">Arrástrala aquí o pulsa · JPG, PNG, WEBP · máx. 5 MB</span>
+              </span>
+            </label>
+            <div id="foto-preview" class="file-preview" hidden>
+              <img alt="">
+              <span id="foto-name" class="min-w-0 flex-1 truncate text-sm"></span>
+              <button id="foto-remove" type="button" class="comment-action label" data-i18n="contact.photoRemove">Quitar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="dialog-fx flex flex-col md:col-span-7">
+          <div class="flex items-end justify-between gap-4">
+            <label for="mensaje" class="label text-mute" data-i18n="contact.message">Tu mensaje (opcional)</label>
+            <span id="mensaje-count" class="label text-faint"></span>
+          </div>
+          <textarea id="mensaje" name="mensaje" class="field field-area mt-3" maxlength="5000" placeholder="Cuéntanos qué tienes en mente: cómo es tu negocio o tu evento, qué debería hacer la web, plazos, ideas…" data-i18n-attr="placeholder:contact.messagePlaceholder"></textarea>
+
+          <div class="honeypot" aria-hidden="true">
+            <label for="web">No rellenar</label>
+            <input id="web" name="web" type="text" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="mt-6 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <label class="flex cursor-pointer items-start gap-3 text-sm leading-snug text-mute lg:max-w-sm">
+              <input class="mt-0.5 h-4 w-4 shrink-0 accent-[#3b5bff]" type="checkbox" name="consentimiento" required>
+              <span data-i18n-html="contact.consent">He leído la <a href="legal.html#privacidad" target="_blank" rel="noopener">política de privacidad</a> y acepto que NetM use estos datos solo para responder a mi solicitud.</span>
+            </label>
+            <button id="form-submit" type="submit" class="inline-flex shrink-0 items-center justify-between gap-6 bg-ice px-6 py-4 font-semibold text-ink transition-colors hover:bg-aqua disabled:opacity-60" data-i18n-html="contact.submit">
+              Enviar solicitud <span class="arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+          <p id="form-status" class="mt-4 min-h-[1.5rem] text-sm leading-snug" role="status" aria-live="polite"></p>
+          <p class="privacy-info mt-2" data-i18n-html="contact.privacyInfo"><strong>Protección de datos.</strong> Responsable: Harkaitz Ferreira (NetM). Finalidad: responder a tu solicitud. Legitimación: tu consentimiento y tu petición de presupuesto. Destinatarios: FormSubmit y Google (Gmail), como proveedores del servicio; no se ceden datos a nadie más. Derechos: acceso, rectificación, supresión y otros en netmsoporte@gmail.com. Más información en la <a href="legal.html#privacidad" target="_blank" rel="noopener">política de privacidad</a>.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Aviso flotante cuando la petición ha llegado -->
+  <div id="sent-dialog" class="dialog dialog-top" hidden>
+    <div class="dialog-backdrop"></div>
+    <div class="dialog-panel glass isolate rounded-sm text-center" role="alertdialog" aria-modal="true" aria-labelledby="sent-title" aria-describedby="sent-text" style="--dialog-width: 40rem" data-no-split>
+      <svg class="dialog-rings" viewBox="0 0 400 400" aria-hidden="true"><g fill="none" stroke="currentColor"><circle cx="200" cy="200" r="40"/><circle cx="200" cy="200" r="85"/><circle cx="200" cy="200" r="135"/><circle cx="200" cy="200" r="190"/></g></svg>
+      <div class="relative flex flex-col items-center">
+        <span class="dialog-fx sent-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </span>
+        <p class="dialog-fx label mt-8 text-brandsoft" data-i18n="sent.label">Petición enviada</p>
+        <h2 id="sent-title" class="dialog-fx mt-3 font-display text-[clamp(2.2rem,6vw,3.6rem)] font-black leading-none" data-i18n="sent.title">¡Muchas gracias!</h2>
+        <p id="sent-text" class="dialog-fx mt-5 max-w-md text-lg leading-relaxed text-ice/85" data-i18n="sent.text">Muchas gracias por realizar su petición, pronto nos pondremos en contacto con vosotros.</p>
+        <div class="dialog-fx mt-10 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+          <button id="sent-home" type="button" class="inline-flex items-center justify-center gap-3 bg-aqua px-6 py-4 font-semibold text-ink transition-colors hover:bg-ice" data-autofocus data-i18n="sent.home">Volver al inicio</button>
+          <button id="sent-exit" type="button" class="inline-flex items-center justify-center gap-3 border border-white/25 px-6 py-4 font-semibold transition-colors hover:border-brand hover:text-brandsoft" data-i18n="sent.exit">Salir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ventana para escribir o editar un comentario -->
+  <div id="comment-dialog" class="dialog" hidden>
+    <div class="dialog-backdrop" data-dialog-close></div>
+    <div class="dialog-panel glass isolate rounded-sm" role="dialog" aria-modal="true" aria-labelledby="comment-title" aria-describedby="comment-notice" style="--dialog-width: 46rem" data-no-split>
+      <svg class="dialog-rings" viewBox="0 0 400 400" aria-hidden="true"><g fill="none" stroke="currentColor"><circle cx="200" cy="200" r="40"/><circle cx="200" cy="200" r="85"/><circle cx="200" cy="200" r="135"/><circle cx="200" cy="200" r="190"/></g></svg>
+      <div class="relative flex items-start justify-between gap-6">
+        <div>
+          <p class="dialog-fx label flex items-center gap-2.5 text-brandsoft"><span class="h-1.5 w-1.5 rounded-full bg-brand" aria-hidden="true"></span><span data-i18n="reviews.dialogLabel">Nuevo comentario</span></p>
+          <h2 id="comment-title" class="dialog-fx mt-3 font-display text-[clamp(2rem,5vw,3.4rem)] font-black leading-none">Deje su opinión</h2>
+        </div>
+        <button type="button" class="label shrink-0 border border-white/25 px-3.5 py-2.5 transition-colors hover:border-brand hover:text-brandsoft" data-dialog-close data-i18n-html="close">Cerrar <span aria-hidden="true">✕</span></button>
+      </div>
+
+      <form id="comment-form" class="relative mt-8" novalidate>
+        <p id="comment-notice" class="dialog-fx flex items-start gap-3 border border-brand/60 bg-brand/10 px-4 py-3.5 leading-snug">
+          <svg class="mt-0.5 h-5 w-5 shrink-0 text-aqua" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5v.5" stroke-linecap="round"/></svg>
+          <span data-i18n="reviews.notice">Si deja un comentario, se guardará bajo su cuenta de Google.</span>
+        </p>
+
+        <div class="dialog-fx mt-8">
+          <div class="flex items-end justify-between gap-4">
+            <label for="comment-score" class="label text-mute" data-i18n="reviews.scoreLabel">Su nota</label>
+            <p class="font-display leading-none" aria-hidden="true"><span id="comment-score-value" class="text-5xl font-black">8</span><span class="text-2xl text-mute">/10</span></p>
+          </div>
+          <input id="comment-score" class="rating-range mt-3" type="range" min="1" max="10" step="1" value="8">
+          <div class="rating-ticks label text-faint" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+        </div>
+
+        <div class="dialog-fx mt-8">
+          <label for="comment-text" class="label text-mute" data-i18n="reviews.textLabel">Su comentario</label>
+          <textarea id="comment-text" class="field field-area is-short mt-3" maxlength="1000" rows="5" required></textarea>
+        </div>
+
+        <p class="dialog-fx mt-4 text-sm leading-snug text-mute" data-i18n="reviews.rules">La sesión de Google quedará iniciada en este dispositivo para que pueda editar su comentario durante los 15 minutos siguientes y borrarlo cuando quiera.</p>
+
+        <div class="dialog-fx mt-7">
+          <button id="comment-submit" type="submit" class="inline-flex w-full items-center justify-between gap-6 bg-ice px-6 py-4 font-semibold text-ink transition-colors hover:bg-aqua disabled:opacity-60 sm:w-auto">
+            <span class="inline-flex items-center gap-3">
+              <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.5 12.3c0-.8-.1-1.5-.2-2.2H12v4.2h5.9a5 5 0 0 1-2.2 3.3v2.7h3.5c2.1-1.9 3.3-4.7 3.3-8z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.2-2.7l-3.5-2.7c-1 .7-2.2 1-3.7 1-2.9 0-5.3-1.9-6.2-4.5H2.2v2.8A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.8 14.1a6.6 6.6 0 0 1 0-4.2V7.1H2.2a11 11 0 0 0 0 9.8l3.6-2.8z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3.1.6 4.2 1.6l3.1-3.1A11 11 0 0 0 2.2 7.1l3.6 2.8C6.7 7.3 9.1 5.4 12 5.4z"/></svg>
+              <span id="comment-submit-label">Continuar con Google y publicar</span>
+            </span>
+            <span class="arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+        <p id="comment-status" class="mt-4 min-h-[1.5rem] text-sm leading-snug" role="status" aria-live="polite"></p>
+        <p class="privacy-info" data-i18n-html="reviews.privacyInfo">Responsable: NetM. Finalidad: publicar su opinión. Legitimación: su consentimiento. Su nombre de Google, su comentario y su nota serán públicos; su email, no. Debe tener al menos 14 años. Más información en la <a href="legal.html#privacidad" target="_blank" rel="noopener">política de privacidad</a>.</p>
+      </form>
+    </div>
+  </div>
+
+  <header class="fixed inset-x-0 top-0 z-30 border-b border-white/[0.07] bg-ink/60 backdrop-blur-xl">
+    <nav class="mx-auto flex h-16 max-w-[110rem] items-center justify-between px-5 md:px-10" aria-label="Principal" data-i18n-attr="aria-label:nav.main">
+      <a href="#inicio" class="block" aria-label="NetM, ir al inicio" data-i18n-attr="aria-label:nav.home">
+        <span id="nav-logo" class="brand text-2xl transition-opacity duration-500">
+          <svg class="brand-mark" viewBox="150 96 212 320" aria-hidden="true"><defs><clipPath id="nm-nav"><rect x="150" y="96" width="212" height="320"/></clipPath></defs><g clip-path="url(#nm-nav)" fill="none" stroke-width="24"><path d="M362 80L256 256" stroke="#3b5bff"/><path d="M162 96V416M350 96V416M150 80L362 432" stroke="currentColor"/></g></svg>
+          <span class="brand-word">Net<b>M</b></span>
+        </span>
+      </a>
+      <div class="flex items-center gap-3 md:gap-8">
+        <a href="#servicios" class="label hidden text-mute transition-colors hover:text-ice lg:block" data-i18n="nav.services">Qué creamos</a>
+        <a href="proyectos.html" class="label hidden text-mute transition-colors hover:text-ice md:block" data-i18n="nav.projects">Proyectos</a>
+        <a href="#opiniones" class="label hidden text-mute transition-colors hover:text-ice md:block" data-i18n="nav.reviews">Opiniones</a>
+        <a href="#nosotros" class="label hidden text-mute transition-colors hover:text-ice lg:block" data-i18n="nav.about">Quiénes somos</a>
+        <a href="#filosofia" class="label hidden text-mute transition-colors hover:text-ice xl:block" data-i18n="nav.philosophy">Filosofía</a>
+        <div class="lang-switch label" role="group" aria-label="Idioma" data-i18n-attr="aria-label:lang.group">
+          <button type="button" data-lang="es" lang="es" aria-pressed="true">ES</button>
+          <button type="button" data-lang="en" lang="en" aria-pressed="false">EN</button>
+          <button type="button" data-lang="eu" lang="eu" aria-pressed="false">EU</button>
+        </div>
+        <a href="#contacto" class="label border min-[360px]:whitespace-nowrap border-white/25 px-3 py-2.5 transition-colors hover:border-brand hover:text-brandsoft sm:px-4" data-i18n="nav.cta">Pide tu web</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="contenido" class="relative z-10">
+
+    <section id="inicio" class="relative flex min-h-[100svh] flex-col justify-end overflow-hidden px-5 pb-8 pt-24 md:px-10 md:pb-10">
+      <div class="hero-veil pointer-events-none absolute inset-0" aria-hidden="true"></div>
+      <div class="relative mx-auto w-full max-w-[110rem]">
+        <div class="hero-fx mb-5 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div id="hero-logo" class="brand text-5xl md:text-7xl" role="img" aria-label="Logotipo de NetM" data-i18n-attr="aria-label:hero.logo">
+            <svg class="brand-mark" viewBox="150 96 212 320" aria-hidden="true"><defs><clipPath id="nm-hero"><rect x="150" y="96" width="212" height="320"/></clipPath></defs><g clip-path="url(#nm-hero)" fill="none" stroke-width="24"><path d="M362 80L256 256" stroke="#3b5bff"/><path d="M162 96V416M350 96V416M150 80L362 432" stroke="currentColor"/></g></svg>
+            <span class="brand-word">Net<b>M</b></span>
+          </div>
+          <p class="label inline-flex items-center gap-2.5 border border-brand/70 bg-ink/60 px-3 py-2 backdrop-blur-sm">
+            <span class="h-1.5 w-1.5 rounded-full bg-brand" aria-hidden="true"></span>
+            <span data-i18n="hero.badge">Estudio de diseño y desarrollo web</span>
+          </p>
+        </div>
+        <h1 class="font-display display-xl font-black">
+          <span class="line"><span class="hero-line" data-i18n="hero.line1">Desarrollamos</span></span>
+          <span class="line"><span class="hero-line" data-i18n-html="hero.line2">tu <em class="liquid-text font-extrabold">página web.</em></span></span>
+        </h1>
+        <div class="mt-7 flex flex-col gap-7 md:mt-9 md:flex-row md:items-end md:justify-between">
+          <p class="hero-fx max-w-xl text-lg leading-relaxed text-ice/90 md:text-xl" data-i18n="hero.lead">
+            Diseñamos y programamos webs a medida, con animación 3D inmersiva, para comercios y eventos especiales que quieren dejar huella.
+          </p>
+          <div class="hero-fx flex flex-wrap items-center gap-x-7 gap-y-4">
+            <a href="#contacto" class="inline-flex items-center gap-3 bg-aqua px-6 py-4 font-semibold text-ink transition-colors hover:bg-ice" data-i18n-html="hero.cta">
+              Quiero mi web <span class="arrow" aria-hidden="true">→</span>
+            </a>
+            <a href="#servicios" class="border-b border-white/30 pb-1 font-medium transition-colors hover:border-brand hover:text-brandsoft" data-i18n="nav.services">Qué creamos</a>
+          </div>
+        </div>
+        <p id="scene-note" class="hero-fx label mt-7 hidden text-mute md:mt-8" data-i18n-html="hero.note">Estas páginas se generan en tiempo real en tu navegador<span class="hidden [@media(hover:hover)]:inline"> — mueve el cursor</span>.</p>
+      </div>
+    </section>
+
+    <section id="servicios" class="px-5 pb-24 pt-24 md:px-10 md:pb-32 md:pt-40">
+      <div class="mx-auto max-w-[110rem]">
+        <p class="reveal label mb-5 text-brandsoft" data-i18n="nav.services">Qué creamos</p>
+        <h2 class="reveal font-display display-lg max-w-5xl font-black" data-i18n="services.title">Dos ramas. Ninguna plantilla.</h2>
+
+        <div class="mt-14 grid gap-6 lg:mt-24 lg:grid-cols-12 lg:gap-8">
+          <div data-slide="left" class="min-w-0 lg:col-span-7">
+            <article data-dive="Comercios" data-i18n-attr="data-dive:card1.title" class="glass tilt-card flex h-full min-h-[27rem] flex-col justify-between rounded-sm p-6 md:p-10 lg:min-h-[34rem] xl:p-12">
+              <div class="tilt-depth flex items-start justify-between gap-4">
+                <h3 class="font-display text-[clamp(2rem,10.5vw,3rem)] font-black lg:text-7xl" data-i18n="card1.title">Comercios</h3>
+                <span class="label shrink-0 pt-2 text-brandsoft">01</span>
+              </div>
+              <div class="tilt-depth mt-12">
+                <p class="max-w-lg text-2xl font-medium leading-snug md:text-3xl" data-i18n="card1.lead">Tu marca no es una plantilla más.</p>
+                <p class="mt-4 max-w-lg leading-relaxed text-mute" data-i18n="card1.text">Tiendas y marcas que convierten su escaparate digital en un lugar que apetece recorrer: producto que se explora en 3D y una compra con carácter propio.</p>
+                <a href="proyectos.html#comercios" class="card-link enter-hint mt-8 inline-flex items-center gap-3 border-b border-brand pb-1 font-semibold" data-i18n-html="card.link">
+                  Entra y mira nuestras webs <span class="arrow text-brandsoft" aria-hidden="true">→</span>
+                </a>
+              </div>
+            </article>
+          </div>
+
+          <div data-slide="right" class="min-w-0 lg:col-span-5 lg:mt-28">
+            <article data-dive="Eventos especiales" data-i18n-attr="data-dive:card2.title" class="glass tilt-card flex h-full min-h-[27rem] flex-col justify-between rounded-sm p-6 md:p-10 lg:min-h-[34rem]">
+              <div class="tilt-depth flex items-start justify-between gap-4">
+                <h3 class="font-display text-[clamp(2rem,10.5vw,3rem)] font-black leading-[1.02] xl:text-6xl" data-i18n="card2.title">Eventos especiales</h3>
+                <span class="label shrink-0 pt-2 text-brandsoft">02</span>
+              </div>
+              <div class="tilt-depth mt-12">
+                <p class="text-2xl font-medium leading-snug md:text-3xl" data-i18n="card2.lead">Que se recuerde antes de empezar.</p>
+                <p class="mt-4 leading-relaxed text-mute" data-i18n="card2.text">Experiencias digitales memorables e inmersivas para eventos que necesitan impacto visual desde el primer clic.</p>
+                <a href="proyectos.html#eventos" class="card-link enter-hint mt-8 inline-flex items-center gap-3 border-b border-brand pb-1 font-semibold" data-i18n-html="card.link">
+                  Entra y mira nuestras webs <span class="arrow text-brandsoft" aria-hidden="true">→</span>
+                </a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="opiniones" class="px-5 pb-24 pt-12 md:px-10 md:pb-40" aria-labelledby="opiniones-titulo">
+      <div class="mx-auto grid max-w-[110rem] gap-12 lg:grid-cols-12 lg:gap-8">
+        <div class="lg:col-span-4">
+          <p class="reveal label mb-5 text-brandsoft" data-i18n="reviews.label">Opiniones</p>
+          <h2 id="opiniones-titulo" class="reveal font-display text-[clamp(2.6rem,5.5vw,5.2rem)] font-black leading-[1.02]" data-i18n="reviews.title">Qué opinan de NetM.</h2>
+          <p class="reveal mt-6 max-w-md text-lg leading-relaxed text-ice/90" data-i18n="reviews.lead">Lee lo que opinan otros visitantes y deja tu propia valoración de NetM.</p>
+          <div id="comments-summary" class="mt-10 flex items-end gap-4 border-t border-white/15 pt-6" hidden>
+            <p class="font-display text-7xl font-black leading-none"><span id="comments-average"></span><span class="text-3xl text-mute">/10</span></p>
+            <p class="pb-1.5">
+              <span class="label block text-brandsoft" data-i18n="reviews.average">Nota media</span>
+              <span id="comments-count" class="label mt-1 block text-mute"></span>
+            </p>
+          </div>
+          <button id="comment-open" type="button" class="reveal mt-10 inline-flex items-center gap-3 bg-aqua px-6 py-4 font-semibold text-ink transition-colors hover:bg-ice" aria-haspopup="dialog" data-i18n-html="reviews.cta">
+            Dejar un comentario <span class="arrow" aria-hidden="true">→</span>
+          </button>
+          <p id="comment-session" class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-mute" hidden>
+            <span data-i18n="reviews.session">Sesión iniciada como</span>
+            <span id="comment-session-name" class="font-semibold text-ice"></span>
+            <span id="comment-session-admin" class="comment-badge label" hidden>Admin</span>
+            <button id="comment-sign-out" type="button" class="comment-action label" data-i18n="reviews.signOut">Cerrar sesión</button>
+          </p>
+        </div>
+
+        <div class="reveal min-w-0 lg:col-span-7 lg:col-start-6">
+          <div class="glass isolate overflow-hidden rounded-sm">
+            <div class="flex items-center justify-between gap-4 border-b border-white/15 px-5 py-4 md:px-8">
+              <p class="label flex items-center gap-2.5 text-mute"><span class="h-1.5 w-1.5 rounded-full bg-aqua" aria-hidden="true"></span><span data-i18n="reviews.box">Comentarios</span></p>
+              <p id="comments-state" class="label text-right text-faint" role="status"></p>
+            </div>
+            <ol id="comments-list" class="comments-list">
+              <li class="comment is-pinned">
+                <span class="comment-avatar is-brand" aria-hidden="true">
+                  <svg class="brand-mark" viewBox="150 96 212 320"><defs><clipPath id="nm-comment"><rect x="150" y="96" width="212" height="320"/></clipPath></defs><g clip-path="url(#nm-comment)" fill="none" stroke-width="24"><path d="M362 80L256 256" stroke="#3b5bff"/><path d="M162 96V416M350 96V416M150 80L362 432" stroke="currentColor"/></g></svg>
+                </span>
+                <div class="min-w-0 flex-1">
+                  <p class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <span class="font-semibold">NetM</span>
+                    <span class="comment-badge label" data-i18n="reviews.pinned">Fijado</span>
+                  </p>
+                  <p class="comment-text mt-2 leading-relaxed text-ice/85" data-i18n="reviews.welcome">Muchas gracias por visitar nuestra página, puedes dejar un comentario en esta caja para que los demás usuarios lo vean.</p>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="nosotros" class="px-5 py-24 md:px-10 md:py-40" aria-labelledby="nosotros-titulo">
+      <div class="mx-auto grid max-w-[110rem] gap-14 lg:grid-cols-12 lg:gap-8">
+        <div class="lg:col-span-5">
+          <p class="reveal label mb-5 text-brandsoft" data-i18n="about.label">Quiénes somos</p>
+          <h2 id="nosotros-titulo" class="reveal font-display text-[clamp(2.6rem,5.5vw,5.2rem)] font-black leading-[1.02]" data-i18n="about.title">Cuatro estudiantes pisando fuerte.</h2>
+          <p class="reveal mt-6 max-w-lg text-lg leading-relaxed text-ice/90" data-i18n="about.lead">NetM somos un grupo de cuatro estudiantes que hemos entrado con fuerza en el desarrollo web. Nos une una misma idea: que cada página sea única, como el negocio o el evento que hay detrás.</p>
+
+          <div class="reveal team-mark mt-12" aria-hidden="true">
+            <span class="team-number font-display">4</span>
+            <span class="team-dots"><span>H</span><span>I</span><span>O</span><span>A</span></span>
+          </div>
+          <p class="reveal label mt-4 text-mute" data-i18n="about.team">Estudiantes · un mismo estudio</p>
+        </div>
+
+        <div class="lg:col-span-6 lg:col-start-7 lg:pt-16">
+          <ol class="about-list border-t border-white/15">
+            <li class="reveal about-item">
+              <span class="label text-brandsoft">01</span>
+              <div>
+                <h3 class="font-display text-[clamp(1.7rem,3vw,2.4rem)] font-black leading-tight" data-i18n="about.p1.title">A tu gusto</h3>
+                <p class="mt-3 leading-relaxed text-ice/80" data-i18n="about.p1.text">Personalizamos cada página según lo que quieras tú: estilo, colores, contenidos y funciones. Nada sale de una plantilla; todo se hace a medida del comprador.</p>
+              </div>
+            </li>
+            <li class="reveal about-item">
+              <span class="label text-brandsoft">02</span>
+              <div>
+                <h3 class="font-display text-[clamp(1.7rem,3vw,2.4rem)] font-black leading-tight" data-i18n="about.p2.title">Para tu público</h3>
+                <p class="mt-3 leading-relaxed text-ice/80" data-i18n="about.p2.text">Diseñamos pensando en las personas a las que quieres llegar. Tú nos dices a quién va dirigida la web, y el tono, la estructura y los mensajes se adaptan a ese público.</p>
+              </div>
+            </li>
+            <li class="reveal about-item">
+              <span class="label text-brandsoft">03</span>
+              <div>
+                <h3 class="font-display text-[clamp(1.7rem,3vw,2.4rem)] font-black leading-tight" data-i18n="about.p3.title">Con ganas de comernos el mundo</h3>
+                <p class="mt-3 leading-relaxed text-ice/80" data-i18n="about.p3.text">Venimos pisando muy fuerte: aprendemos rápido, trabajamos con las herramientas más actuales y nos implicamos en cada proyecto como si fuera nuestro.</p>
+              </div>
+            </li>
+          </ol>
+          <a href="#contacto" class="reveal mt-10 inline-flex items-center gap-3 bg-aqua px-6 py-4 font-semibold text-ink transition-colors hover:bg-ice" data-i18n-html="about.cta">
+            Cuéntanos a quién quieres llegar <span class="arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="filosofia" class="px-5 py-24 md:px-10 md:py-44">
+      <div class="mx-auto grid max-w-[110rem] md:grid-cols-12">
+        <div class="md:col-span-7 md:col-start-6">
+          <p class="reveal label mb-5 text-brandsoft" data-i18n="philosophy.label">Nuestra filosofía</p>
+          <h2 class="reveal font-display display-lg font-black" data-i18n="philosophy.title">Hecho con oficio.</h2>
+          <p class="reveal mt-6 max-w-xl text-xl leading-relaxed text-ice/90" data-i18n="philosophy.lead">
+            Tratamos cada web como una pieza de taller: cuidada por fuera, sólida por dentro y pensada para durar.
+          </p>
+          <dl class="mt-14 border-t border-white/15 md:mt-20">
+            <div class="reveal grid gap-2 border-b border-white/15 py-7 md:grid-cols-[17rem_1fr] md:gap-8">
+              <dt class="font-display text-2xl font-bold" data-i18n="ph1.title">Artesanía digital</dt>
+              <dd class="leading-relaxed text-ice/80" data-i18n="ph1.text">Cada proyecto se diseña a medida. Nada de piezas de catálogo con otro logotipo.</dd>
+            </div>
+            <div class="reveal grid gap-2 border-b border-white/15 py-7 md:grid-cols-[17rem_1fr] md:gap-8">
+              <dt class="font-display text-2xl font-bold" data-i18n="ph2.title">Código limpio</dt>
+              <dd class="leading-relaxed text-ice/80" data-i18n="ph2.text">Lo que no se ve también se cuida, para que tu web sea fácil de mantener y de hacer crecer.</dd>
+            </div>
+            <div class="reveal grid gap-2 border-b border-white/15 py-7 md:grid-cols-[17rem_1fr] md:gap-8">
+              <dt class="font-display text-2xl font-bold" data-i18n="ph3.title">Rendimiento visual</dt>
+              <dd class="leading-relaxed text-ice/80" data-i18n="ph3.text">El impacto no vale nada si la web va a tirones. El 3D tiene que verse bien y moverse con fluidez.</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto" class="px-5 pb-20 pt-20 md:px-10 md:pb-32 md:pt-32">
+      <div class="mx-auto grid max-w-[110rem] gap-12 md:grid-cols-12 md:gap-8">
+        <div class="md:col-span-6">
+          <p class="reveal label mb-5 text-brandsoft" data-i18n="contact.label">Proyectos pioneros</p>
+          <h2 class="reveal font-display display-lg font-black" data-i18n="contact.title">Cuéntanos qué web necesitas.</h2>
+          <p class="reveal mt-6 max-w-md text-lg leading-relaxed text-ice/90" data-i18n="contact.lead">Si tienes un comercio o un evento en mente, escríbenos y te respondemos por email para empezar a darle forma.</p>
+        </div>
+
+        <div class="reveal md:col-span-5 md:col-start-8">
+          <!-- Adelanto del formulario: pulsar en cualquier punto abre la ventana grande. -->
+          <button id="contact-open" type="button" class="contact-teaser glass isolate rounded-sm p-7 md:p-10" aria-haspopup="dialog">
+            <span class="label block text-mute" data-i18n="contact.teaserName">Nombre</span>
+            <span class="contact-teaser-line" aria-hidden="true"></span>
+            <span class="label mt-6 block text-mute">Email</span>
+            <span class="contact-teaser-line" aria-hidden="true"></span>
+            <span class="label mt-6 block text-mute" data-i18n="contact.teaserIdea">Tu idea</span>
+            <span class="contact-teaser-area" data-i18n="contact.teaserPlaceholder">Cuéntanos tu proyecto…</span>
+            <span class="contact-teaser-cta mt-7 flex w-full items-center justify-between bg-ice px-6 py-4 font-semibold text-ink" data-i18n-html="contact.open">
+              Escribir mensaje <span class="arrow" aria-hidden="true">→</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+  <script src="js/footer.js"></script>
+  <script src="js/lang/es.js"></script>
+  <script src="js/lang/en.js"></script>
+  <script src="js/lang/eu.js"></script>
+  <script src="js/i18n.js"></script>
+</body>
+</html>

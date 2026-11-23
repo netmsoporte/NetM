@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es" class="pre-intro is-arriving">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="proj.meta.title">Proyectos — NetM</title>
+  <meta name="description" content="Las páginas web que ha diseñado y desarrollado NetM para comercios y eventos especiales." data-i18n-attr="content:proj.meta.description">
+  <meta name="theme-color" content="#050d1c">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23050d1c'/%3E%3Cg fill='none' stroke-width='3.2'%3E%3Cpath d='M22.5 5 L16 15.5' stroke='%233b5bff'/%3E%3Cpath d='M9.6 6v20M22.4 6v20M8.5 5L23.5 27' stroke='%23e6f4f6'/%3E%3C/g%3E%3C/svg%3E">
+  <script>
+    // Si se llega desde una tarjeta de la portada, el velo empieza tapando la pantalla para que no haya parpadeo.
+    try { if (!sessionStorage.getItem('netm-dive')) document.documentElement.classList.remove('is-arriving'); }
+    catch (error) { document.documentElement.classList.remove('is-arriving'); }
+    // Red de seguridad: si los scripts no cargan, el velo no se queda tapando la página.
+    setTimeout(function () { document.documentElement.classList.remove('is-arriving'); }, 2500);
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script src="js/tailwind-config.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous"></script>
+  <script defer src="js/interface.js"></script>
+  <script defer src="js/proyectos-data.js"></script>
+  <script defer src="js/proyectos.js"></script>
+
+  <link rel="stylesheet" href="css/base.css">
+  <style>
+    .is-arriving .dive-veil { visibility: visible; }
+    #galeria { position: relative; height: 100svh; overflow: hidden; }
+    #galeria.is-static { overflow-x: auto; overflow-y: hidden; }
+    #track { display: flex; height: 100%; width: max-content; will-change: transform; }
+    .panel { flex: none; width: 100vw; height: 100%; }
+    #scatter { position: relative; flex: none; height: 100%; }
+
+    .cover-slot { position: absolute; }
+    .cover { display: block; border-radius: 6px; padding: 0.6rem 0.6rem 1rem; transform-origin: 50% 60%; will-change: transform; }
+    .cover::before { border-radius: inherit; background: linear-gradient(150deg, rgba(22, 48, 75, 0.96), rgba(9, 20, 40, 0.97)); box-shadow: 0 30px 60px -25px rgba(0, 0, 0, 0.7); }
+    .cover-bar { display: flex; align-items: center; gap: 6px; height: 1.6rem; padding: 0 0.35rem 0.5rem; }
+    .cover-bar i { width: 8px; height: 8px; border-radius: 50%; background: #63e6d9; }
+    .cover-bar i:nth-child(2) { background: #4fb8f0; }
+    .cover-bar i:nth-child(3) { background: #a97bff; }
+    .cover-url { margin-left: 0.5rem; flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; border-radius: 99px; background: rgba(255, 255, 255, 0.07); padding: 0.1rem 0.7rem; font: 0.68rem "DM Mono", monospace; color: #8398a6; }
+    .cover-media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 3px; background: #0a1a31; }
+    .cover-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 900ms var(--ease-out); }
+    .cover-caption { padding: 0.85rem 0.35rem 0; }
+    .cover-mock {
+      position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 0.6rem; padding: 9%;
+      background: radial-gradient(120% 90% at 85% 10%, color-mix(in srgb, var(--to) 55%, transparent), transparent 60%), linear-gradient(140deg, #16324f, #0a1a31);
+      transition: transform 900ms var(--ease-out);
+    }
+    .cover-mock-title { font: 900 clamp(1.4rem, 2.6vw, 2.4rem)/1 "Playfair Display", serif; letter-spacing: -0.02em; color: #e6f4f6; }
+    .cover-mock-line { height: 0.45rem; width: 62%; border-radius: 99px; background: rgba(230, 244, 246, 0.35); }
+    .cover-mock-line.is-short { width: 40%; }
+    .cover-mock-button { margin-top: 0.4rem; height: 1.4rem; width: 6.5rem; border-radius: 99px; background: var(--from); }
+    .cover-mock.is-free { align-items: center; text-align: center; background: linear-gradient(140deg, rgba(22, 50, 79, 0.55), rgba(10, 26, 49, 0.55)); outline: 1px dashed rgba(125, 144, 255, 0.55); outline-offset: -10px; }
+    .cover-plus { font: 300 3.2rem/1 "Instrument Sans", sans-serif; color: var(--from); transition: transform 600ms var(--ease-out); }
+    .cover-free-text { color: #a9bcc7; }
+    @media (hover: hover) {
+      .cover:hover .cover-media img, .cover:hover .cover-mock { transform: scale(1.05); }
+      .cover:hover .cover-plus { transform: rotate(90deg) scale(1.15); }
+      .cover:hover h3 { color: #7d90ff; }
+    }
+    #scroll-progress { transform: scaleX(0); transform-origin: 0 50%; }
+    .scroll-hint span { display: inline-block; animation: nudge 1.6s var(--ease-out) infinite; }
+    @keyframes nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(0.5rem); } }
+    @media (prefers-reduced-motion: reduce) { .scroll-hint span { animation: none; } }
+  </style>
+</head>
+
+<body class="page bg-ink font-sans text-ice antialiased">
+  <a href="#galeria" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-ice focus:px-4 focus:py-2 focus:text-ink" data-i18n="proj.skip">Saltar a los proyectos</a>
+
+  <div class="deep-glow pointer-events-none fixed inset-0 z-0" aria-hidden="true"></div>
+  <div id="pointer-glow" class="pointer-events-none fixed z-0" aria-hidden="true"></div>
+  <div id="cursor-circle" class="pointer-events-none fixed z-[80]" aria-hidden="true"></div>
+  <div id="dive-veil" class="dive-veil" aria-hidden="true"><p class="dive-veil-title"></p></div>
+
+  <header class="fixed inset-x-0 top-0 z-30 border-b border-white/[0.07] bg-ink/60 backdrop-blur-xl">
+    <nav class="mx-auto flex h-16 max-w-[110rem] items-center justify-between px-5 md:px-10" aria-label="Principal" data-i18n-attr="aria-label:nav.main">
+      <a href="index.html" class="block" aria-label="NetM, ir a la portada" data-i18n-attr="aria-label:proj.navHome">
+        <span class="brand text-2xl">
+          <svg class="brand-mark" viewBox="150 96 212 320" aria-hidden="true"><defs><clipPath id="nm-nav"><rect x="150" y="96" width="212" height="320"/></clipPath></defs><g clip-path="url(#nm-nav)" fill="none" stroke-width="24"><path d="M362 80L256 256" stroke="#3b5bff"/><path d="M162 96V416M350 96V416M150 80L362 432" stroke="currentColor"/></g></svg>
+          <span class="brand-word">Net<b>M</b></span>
+        </span>
+      </a>
+      <div class="flex items-center gap-3 md:gap-8">
+        <a href="index.html#servicios" class="label hidden text-mute transition-colors hover:text-ice md:block" data-i18n="proj.back">← Volver</a>
+        <div class="lang-switch label" role="group" aria-label="Idioma" data-i18n-attr="aria-label:lang.group">
+          <button type="button" data-lang="es" lang="es" aria-pressed="true">ES</button>
+          <button type="button" data-lang="en" lang="en" aria-pressed="false">EN</button>
+          <button type="button" data-lang="eu" lang="eu" aria-pressed="false">EU</button>
+        </div>
+        <a href="index.html#contacto" class="label border min-[360px]:whitespace-nowrap border-white/25 px-3 py-2.5 transition-colors hover:border-brand hover:text-brandsoft sm:px-4" data-i18n="nav.cta">Pide tu web</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="relative z-10">
+    <section id="galeria" aria-labelledby="titulo-proyectos">
+      <div id="track">
+        <div class="panel flex flex-col justify-end px-5 pb-16 pt-24 md:px-10 md:pb-20">
+          <p id="entry-label" class="intro-fx label mb-5 text-brandsoft" data-i18n="proj.label">Proyectos NetM</p>
+          <h1 id="titulo-proyectos" class="font-display display-xl font-black" data-i18n-html="proj.title">
+            Nuestras<br><em class="liquid-text font-extrabold">webs.</em>
+          </h1>
+          <p class="intro-fx mt-7 max-w-xl text-lg leading-relaxed text-ice/90 md:text-xl" data-i18n="proj.lead">
+            Cada portada es una página web diseñada y desarrollada por NetM. Sigue bajando y el estudio se irá desplegando hacia la derecha.
+          </p>
+          <p class="intro-fx scroll-hint label mt-8 text-mute" data-i18n-html="proj.scroll">Haz scroll <span aria-hidden="true">→</span></p>
+        </div>
+
+        <div id="scatter" aria-label="Webs creadas por NetM" data-i18n-attr="aria-label:proj.scatter"></div>
+
+        <div class="panel flex flex-col items-start justify-center px-5 md:px-16">
+          <p class="label mb-5 text-brandsoft" data-i18n="proj.next.label">Tu proyecto</p>
+          <h2 class="font-display display-lg max-w-4xl font-black" data-i18n="proj.next.title">¿La siguiente portada es la tuya?</h2>
+          <a href="index.html#contacto" class="mt-10 inline-flex items-center gap-3 bg-aqua px-6 py-4 font-semibold text-ink transition-colors hover:bg-ice" data-i18n-html="proj.next.cta">
+            Desarrollamos tu página web <span class="arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="pointer-events-none absolute inset-x-5 bottom-6 flex items-center gap-4 md:inset-x-10" aria-hidden="true">
+        <span class="label text-faint" data-i18n="proj.progress.start">Inicio</span>
+        <span class="relative h-px flex-1 bg-white/15"><span id="scroll-progress" class="absolute inset-0 bg-brand"></span></span>
+        <span class="label text-faint" data-i18n="proj.progress.end">Tu web</span>
+      </div>
+    </section>
+  </main>
+
+
+  <script src="js/footer.js"></script>
+  <script src="js/lang/es.js"></script>
+  <script src="js/lang/en.js"></script>
+  <script src="js/lang/eu.js"></script>
+  <script src="js/i18n.js"></script>
+</body>
+</html>

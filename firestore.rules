@@ -1,0 +1,46 @@
+rules_version = '2';
+
+// Reglas de los comentarios de la portada de NetM. Se pegan en Firebase → Firestore Database → Reglas.
+// Son las que mandan de verdad: aunque alguien manipule la web, el servidor solo acepta esto.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && request.auth.token.email == 'netmsoporte@gmail.com'
+        && request.auth.token.email_verified == true;
+    }
+
+    function isValidContent(data) {
+      return data.texto is string && data.texto.size() >= 1 && data.texto.size() <= 1000
+        && data.nota is int && data.nota >= 1 && data.nota <= 10;
+    }
+
+    match /comentarios/{comentarioId} {
+      allow read: if true;
+
+      allow create: if isSignedIn()
+        && request.resource.data.keys().hasOnly(['uid', 'nombre', 'texto', 'nota', 'creado', 'editado'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.nombre is string
+        && request.resource.data.nombre.size() >= 1 && request.resource.data.nombre.size() <= 80
+        && request.resource.data.creado == request.time
+        && request.resource.data.editado == null
+        && isValidContent(request.resource.data);
+
+      // El autor solo puede cambiar el texto y la nota durante los 15 minutos siguientes a publicarlo.
+      allow update: if isSignedIn()
+        && resource.data.uid == request.auth.uid
+        && request.time < resource.data.creado + duration.value(15, 'm')
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['texto', 'nota', 'editado'])
+        && request.resource.data.editado == request.time
+        && isValidContent(request.resource.data);
+
+      allow delete: if isSignedIn() && (resource.data.uid == request.auth.uid || isAdmin());
+    }
+  }
+}
