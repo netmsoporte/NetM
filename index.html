@@ -45,6 +45,11 @@
     .choice input:checked + span { background: #e6f4f6; color: #050d1c; border-color: #e6f4f6; }
     .choice input:focus-visible + span { outline: 2px solid #7d90ff; outline-offset: 2px; }
     .form-alert { color: #ffc38a; }
+    /* Campo que ha dado error: se marca con el mismo naranja del aviso hasta que se corrige. */
+    .field[aria-invalid="true"] { border-bottom-color: #ffc38a; box-shadow: 0 2px 0 rgba(255, 195, 138, 0.55); }
+    .field-area[aria-invalid="true"] { border-color: #ffc38a; box-shadow: 0 0 0 1px #ffc38a; }
+    input[type="checkbox"][aria-invalid="true"] { outline: 2px solid #ffc38a; outline-offset: 2px; }
+    #foto[aria-invalid="true"] + .file-drop-plus { color: #ffc38a; }
     .honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
     [data-dive], .is-over-pages { cursor: pointer; }
     [data-slide] { will-change: transform; backface-visibility: hidden; }

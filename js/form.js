@@ -146,26 +146,76 @@
   }
 
   // ── Envío ─────────────────────────────────────────────────────────────────
+  // Cada fallo lleva un tipo (kind) para poder decir al visitante qué ha pasado exactamente;
+  // los textos están en js/lang como form.err.<kind>.
+  class SendError extends Error {
+    constructor(kind, detail = '') {
+      super(detail || kind);
+      this.kind = kind;
+      this.detail = detail;
+    }
+  }
+
   async function postForm(payload, hasPhoto) {
-    const response = await fetch(FORM_ENDPOINT, {
-      method: 'POST',
-      headers: { Accept: 'application/json' },
-      body: payload,
-      signal: AbortSignal.timeout(hasPhoto ? FORM_TIMEOUT_PHOTO_MS : FORM_TIMEOUT_MS)
-    });
+    if (!navigator.onLine) throw new SendError('offline');
+    let response;
+    try {
+      response = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: payload,
+        signal: AbortSignal.timeout(hasPhoto ? FORM_TIMEOUT_PHOTO_MS : FORM_TIMEOUT_MS)
+      });
+    } catch (error) {
+      if (error.name === 'TimeoutError' || error.name === 'AbortError') throw new SendError(hasPhoto ? 'timeoutPhoto' : 'timeout');
+      throw new SendError('network', error.message);
+    }
     const result = await response.json().catch(() => ({}));
-    // FormSubmit responde 200 con success "false" mientras el formulario no se ha activado.
-    if (!response.ok || String(result.success) !== 'true') throw new Error(result.message || `HTTP ${response.status}`);
+    const message = String(result.message || '');
+    if (response.ok && String(result.success) === 'true') return;
+    // FormSubmit responde 200 con success "false" y este aviso mientras el formulario no se ha activado.
+    if (/activat/i.test(message)) throw new SendError('activation', message);
+    if (response.status === 413) throw new SendError('tooLarge');
+    if (response.status === 429) throw new SendError('tooMany');
+    if (response.status >= 500) throw new SendError('server', `HTTP ${response.status}`);
+    throw new SendError('rejected', message || `HTTP ${response.status}`);
+  }
+
+  function describeSendError(error) {
+    const kind = error instanceof SendError ? error.kind : 'unknown';
+    return NetM.t(`form.err.${kind}`, { detail: error.detail || error.message || '' });
+  }
+
+  // Comprobaciones de cada campo, en el orden en que aparecen: el aviso dice qué campo falla y por qué.
+  function checkFields(form) {
+    const { nombre, email } = form.elements;
+    if (!nombre.value.trim()) return { error: NetM.t('form.err.nameEmpty'), field: nombre };
+    if (!email.value.trim()) return { error: NetM.t('form.err.emailEmpty'), field: email };
+    if (email.validity.typeMismatch) return { error: NetM.t('form.err.emailInvalid'), field: email };
+    return null;
   }
 
   function validate(form, data) {
-    if (!FORM_ENDPOINT) return { error: NetM.t('form.offline') };
+    const fieldProblem = checkFields(form);
+    if (fieldProblem) return fieldProblem;
     const reference = normalizeReference(String(data.get('referencia') || ''));
-    if (reference === null) return { error: NetM.t('form.badUrl'), focus: '#referencia' };
+    if (reference === null) return { error: NetM.t('form.badUrl'), field: form.elements.referencia };
     const photo = data.get('attachment');
     const photoProblem = checkPhoto(photo);
-    if (photoProblem) return { error: photoProblem, focus: '#foto' };
+    if (photoProblem) return { error: photoProblem, field: NetM.$('#foto') };
+    if (!form.elements.consentimiento.checked) return { error: NetM.t('form.err.consent'), field: form.elements.consentimiento };
+    if (!FORM_ENDPOINT) return { error: NetM.t('form.offline') };
     return { reference, photo: photo && photo.size ? photo : null };
+  }
+
+  // Marca el campo que falla (para lectores de pantalla y estilos) y lleva el foco a él.
+  function markInvalid(form, field) {
+    form.querySelectorAll('[aria-invalid="true"]').forEach((element) => element.removeAttribute('aria-invalid'));
+    if (!field) return;
+    field.setAttribute('aria-invalid', 'true');
+    const describedBy = (field.getAttribute('aria-describedby') || '').split(' ').filter(Boolean);
+    if (!describedBy.includes('form-status')) field.setAttribute('aria-describedby', [...describedBy, 'form-status'].join(' '));
+    field.focus();
   }
 
   function initForm() {
@@ -178,21 +228,21 @@
     const submit = NetM.$('#form-submit');
 
     NetM.$('#contact-open').addEventListener('click', () => contactDialog.open(NetM.$('#nombre')));
+    // En cuanto se corrige el campo marcado, desaparece la marca de error.
+    ['input', 'change'].forEach((type) => form.addEventListener(type, (event) => {
+      if (event.target.getAttribute('aria-invalid') === 'true') event.target.removeAttribute('aria-invalid');
+    }));
     NetM.$$('[data-project]').forEach((link) => {
       link.addEventListener('click', () => { form.elements.tipo.value = link.dataset.project; });
     });
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
-      if (!form.reportValidity()) return;
       const data = new FormData(form);
       if (data.get('web')) return; // Campo trampa relleno: es un bot.
       const checked = validate(form, data);
-      if (checked.error) {
-        showFormStatus(checked.error, true);
-        if (checked.focus) NetM.$(checked.focus).focus();
-        return;
-      }
+      markInvalid(form, checked.field);
+      if (checked.error) return showFormStatus(checked.error, true);
       submit.disabled = true;
       showFormStatus(NetM.t('form.sending'));
       try {
@@ -205,7 +255,7 @@
         sentDialog.open();
       } catch (error) {
         console.error('Error al enviar el formulario:', error);
-        showFormStatus(NetM.t('form.error'), true);
+        showFormStatus(describeSendError(error), true);
       } finally {
         submit.disabled = false;
       }

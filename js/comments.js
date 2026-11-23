@@ -12,9 +12,35 @@
   const DELETE_CONFIRM_MS = 4000;
   const REFRESH_MS = 30000;
   const DEFAULT_SCORE = 8;
-  const CANCELLED_SIGN_IN = ['auth/popup-closed-by-user', 'auth/cancelled-popup-request'];
+  // Códigos de error de Google/Firebase con un motivo propio; el resto cae en el aviso de cada acción.
+  const ERROR_KEYS = {
+    'auth/popup-closed-by-user': 'c.signInCancelled',
+    'auth/cancelled-popup-request': 'c.signInCancelled',
+    'auth/popup-blocked': 'c.err.popupBlocked',
+    'auth/unauthorized-domain': 'c.err.domain',
+    'auth/operation-not-allowed': 'c.err.providerOff',
+    'auth/network-request-failed': 'c.err.network',
+    'auth/too-many-requests': 'c.err.tooMany',
+    'auth/user-disabled': 'c.err.userDisabled',
+    unavailable: 'c.err.network',
+    'deadline-exceeded': 'c.err.network',
+    'resource-exhausted': 'c.err.quota',
+    unauthenticated: 'c.err.session'
+  };
+  // "Permiso denegado" significa cosas distintas según lo que se intentaba hacer.
+  const DENIED_KEYS = { save: 'c.err.denied', edit: 'c.editExpired', delete: 'c.err.deleteDenied', load: 'c.err.readDenied' };
+  const FALLBACK_KEYS = { signIn: 'c.signInError', save: 'c.saveError', edit: 'c.saveError', delete: 'c.deleteError', load: 'c.loadError' };
 
   const state = { auth: null, db: null, user: null, isAdmin: false, comments: [], editingId: null };
+
+  function explainError(error, action) {
+    const code = (error && error.code) || '';
+    const key = code === 'permission-denied' ? DENIED_KEYS[action] : ERROR_KEYS[code];
+    return t(key || FALLBACK_KEYS[action], { detail: code || (error && error.message) || '' });
+  }
+
+  // Error ya explicado (validaciones propias): su mensaje se muestra tal cual.
+  class ShownError extends Error {}
 
   const isConfigured = () => Boolean(NetM.FIREBASE_CONFIG && NetM.FIREBASE_CONFIG.apiKey);
 
@@ -154,7 +180,7 @@
     state.db.collection(COLLECTION).doc(comment.id).delete().catch((error) => {
       console.error('Error al borrar el comentario:', error);
       button.disabled = false;
-      setBoxState(t('c.deleteError'));
+      setBoxState(explainError(error, 'delete'));
     });
   }
 
@@ -193,7 +219,7 @@
   function readComposer() {
     const texto = $('#comment-text').value.trim();
     const nota = Number($('#comment-score').value);
-    if (!texto) throw new Error(t('c.emptyText'));
+    if (!texto) throw new ShownError(t('c.emptyText'));
     return { texto, nota: Math.min(Math.max(Math.round(nota), 1), 10) };
   }
 
@@ -201,10 +227,13 @@
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
     try {
-      await state.auth.signInWithPopup(provider);
+      // El usuario se toma de la respuesta: onAuthStateChanged puede avisar después y el comentario
+      // se guarda justo a continuación.
+      const credential = await state.auth.signInWithPopup(provider);
+      state.user = (credential && credential.user) || state.auth.currentUser;
     } catch (error) {
       console.error('Error al iniciar sesión con Google:', error);
-      throw new Error(CANCELLED_SIGN_IN.includes(error.code) ? t('c.signInCancelled') : t('c.signInError'));
+      throw new ShownError(explainError(error, 'signIn'));
     }
   }
 
@@ -213,14 +242,22 @@
     const collection = state.db.collection(COLLECTION);
     if (state.editingId) {
       const comment = state.comments.find((item) => item.id === state.editingId);
-      if (!comment || editMinutesLeft(comment) <= 0) throw new Error(t('c.editExpired'));
-      await collection.doc(state.editingId).update({ ...content, editado: FieldValue.serverTimestamp() });
+      if (!comment || editMinutesLeft(comment) <= 0) throw new ShownError(t('c.editExpired'));
+      try {
+        await collection.doc(state.editingId).update({ ...content, editado: FieldValue.serverTimestamp() });
+      } catch (error) {
+        throw new ShownError(explainError(error, 'edit'));
+      }
       return;
     }
     // Se guarda el nombre exacto de la cuenta: las reglas de Firestore lo comparan con el de Google.
     // Si la cuenta no tiene nombre se guarda vacío y al mostrarlo sale "Usuario de Google".
     const nombre = state.user.displayName || '';
-    await collection.add({ uid: state.user.uid, nombre, ...content, creado: FieldValue.serverTimestamp(), editado: null });
+    try {
+      await collection.add({ uid: state.user.uid, nombre, ...content, creado: FieldValue.serverTimestamp(), editado: null });
+    } catch (error) {
+      throw new ShownError(explainError(error, 'save'));
+    }
   }
 
   async function submitComment(event) {
@@ -240,8 +277,8 @@
       await saveComment(content);
       await composer.close();
     } catch (error) {
-      if (!error.message || error.code) console.error('Error al guardar el comentario:', error);
-      setComposerStatus(error.code ? t('c.saveError') : error.message);
+      if (!(error instanceof ShownError)) console.error('Error al guardar el comentario:', error);
+      setComposerStatus(error instanceof ShownError ? error.message : explainError(error, 'save'));
     } finally {
       submit.disabled = false;
       updateSubmitLabel();
@@ -278,7 +315,7 @@
       renderList();
     }, (error) => {
       console.error('Error al leer los comentarios:', error);
-      setBoxState(t('c.loadError'));
+      setBoxState(explainError(error, 'load'));
     });
   }
 
@@ -301,7 +338,7 @@
       await loadFirebase();
     } catch (error) {
       console.error('Error al cargar Firebase:', error);
-      return setBoxState(t('c.loadError'));
+      return setBoxState(t('c.err.sdk'));
     }
     listenSession();
     listenComments();
